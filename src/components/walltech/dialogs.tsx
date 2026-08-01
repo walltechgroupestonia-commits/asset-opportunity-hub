@@ -36,7 +36,7 @@ function Field({
   children,
 }: {
   label: string;
-  error?: string;
+  error?: string | undefined;
   children: ReactNode;
 }) {
   return (
@@ -112,7 +112,7 @@ export function DossierDialog({
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={submit} className="space-y-4">
-          <Field label="Obiettivo dell'Operazione" error={errors.goal}>
+          <Field label="Obiettivo dell'Operazione" error={errors["goal"]}>
             <Select value={goal} onValueChange={setGoal}>
               <SelectTrigger>
                 <SelectValue />
@@ -124,13 +124,13 @@ export function DossierDialog({
               </SelectContent>
             </Select>
           </Field>
-          <Field label="Nome e Cognome" error={errors.name}>
+          <Field label="Nome e Cognome" error={errors["name"]}>
             <Input name="name" maxLength={100} autoComplete="name" />
           </Field>
-          <Field label="Email" error={errors.email}>
+          <Field label="Email" error={errors["email"]}>
             <Input name="email" type="email" maxLength={255} autoComplete="email" />
           </Field>
-          <Field label="Telefono / WhatsApp" error={errors.phone}>
+          <Field label="Telefono / WhatsApp" error={errors["phone"]}>
             <Input name="phone" maxLength={30} autoComplete="tel" />
           </Field>
           <DialogFooter className="gap-2 sm:gap-2">
@@ -219,7 +219,7 @@ export function DebtorDialog({
                 analisi strutturata per risanamento debito aziendale, erariale e protezione del
                 patrimonio.
               </p>
-              <Field label="Ragione Sociale dell'Azienda Esecutata" error={errors.company}>
+              <Field label="Ragione Sociale dell'Azienda Esecutata" error={errors["company"]}>
                 <Input name="company" maxLength={150} />
               </Field>
               <Field label="Chi sta effettuando la segnalazione?">
@@ -241,19 +241,19 @@ export function DebtorDialog({
             </div>
           ) : null}
 
-          <Field label="Nome e Cognome del Richiedente" error={errors.name}>
+          <Field label="Nome e Cognome del Richiedente" error={errors["name"]}>
             <Input name="name" maxLength={100} autoComplete="name" />
           </Field>
-          <Field label="Email" error={errors.email}>
+          <Field label="Email" error={errors["email"]}>
             <Input name="email" type="email" maxLength={255} autoComplete="email" />
           </Field>
-          <Field label="Telefono / WhatsApp" error={errors.phone}>
+          <Field label="Telefono / WhatsApp" error={errors["phone"]}>
             <Input name="phone" maxLength={30} autoComplete="tel" />
           </Field>
-          <Field label="Città e RGE / Numero Procedura (se noto)" error={errors.procedure}>
+          <Field label="Città e RGE / Numero Procedura (se noto)" error={errors["procedure"]}>
             <Input name="procedure" maxLength={120} />
           </Field>
-          <Field label="Stima approssimativa del debito totale (€)" error={errors.debt}>
+          <Field label="Stima approssimativa del debito totale (€)" error={errors["debt"]}>
             <Input name="debt" inputMode="numeric" maxLength={20} />
           </Field>
 
@@ -332,19 +332,19 @@ export function PartnerDialog({
               </SelectContent>
             </Select>
           </Field>
-          <Field label="Nome Ente / Banca / Servicer" error={errors.entity}>
+          <Field label="Nome Ente / Banca / Servicer" error={errors["entity"]}>
             <Input name="entity" maxLength={150} />
           </Field>
-          <Field label="Nome e Cognome Referente" error={errors.name}>
+          <Field label="Nome e Cognome Referente" error={errors["name"]}>
             <Input name="name" maxLength={100} autoComplete="name" />
           </Field>
-          <Field label="Email Professionale" error={errors.email}>
+          <Field label="Email Professionale" error={errors["email"]}>
             <Input name="email" type="email" maxLength={255} autoComplete="email" />
           </Field>
-          <Field label="Telefono Diretto" error={errors.phone}>
+          <Field label="Telefono Diretto" error={errors["phone"]}>
             <Input name="phone" maxLength={30} autoComplete="tel" />
           </Field>
-          <Field label="Note o Tipo Operazione" error={errors.notes}>
+          <Field label="Note o Tipo Operazione" error={errors["notes"]}>
             <Textarea name="notes" maxLength={1000} rows={3} />
           </Field>
           <DialogFooter className="gap-2 sm:gap-2">
