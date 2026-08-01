@@ -22,8 +22,9 @@ const buttonVariants = cva(
           "border border-border bg-surface text-surface-foreground hover:border-primary hover:text-primary",
         quiet:
           "border border-border/70 bg-transparent text-muted-foreground hover:text-foreground hover:border-foreground/40",
-
+      },
       size: {
+
         default: "h-9 px-4 py-2",
         sm: "h-8 rounded-md px-3 text-xs",
         lg: "h-10 rounded-md px-8",
