@@ -110,7 +110,8 @@ export function OperationsExplorer({ onDossier }: { onDossier: () => void }) {
             <h2 className="mt-3 text-2xl font-bold md:text-3xl">Pipeline pre-asta e giurisdizionale</h2>
           </div>
           <p className="mono-label inline-flex items-center gap-2 rounded-sm border border-success/40 px-3 py-1.5 text-success">
-            <Radio className="size-3.5" /> Sotto-sistema Ingestion: Attivo (PVP &amp; Portali Aste)
+            <span className="pulse-dot size-2 rounded-full bg-success" aria-hidden="true" />
+            Sotto-sistema Ingestion: Attivo (PVP &amp; Portali Aste)
           </p>
         </div>
 

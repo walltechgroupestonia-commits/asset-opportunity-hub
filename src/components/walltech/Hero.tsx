@@ -66,7 +66,7 @@ export function Hero({ onDossier, onOperations }: { onDossier: () => void; onOpe
         </p>
 
         <div className="animate-rise mt-8 flex flex-wrap gap-3" style={{ animationDelay: "240ms" }}>
-          <Button variant="signal" size="lg" onClick={onDossier} className="hover-scale">
+          <Button variant="signal" size="lg" onClick={onDossier} className="transition-transform duration-200 hover:scale-[1.03]">
             Richiedi il Dossier Integrato
           </Button>
           <Button variant="quiet" size="lg" onClick={onOperations}>
