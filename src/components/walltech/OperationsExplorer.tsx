@@ -20,9 +20,12 @@ const euro = new Intl.NumberFormat("it-IT", {
 
 const DEFAULTS = { q: "", country: "all", type: "all", budget: "all", occupancy: "all" };
 
-function OperationCard({ op, onDossier }: { op: Operation; onDossier: () => void }) {
+function OperationCard({ op, onDossier, index }: { op: Operation; onDossier: () => void; index: number }) {
   return (
-    <article className="surface-panel flex flex-col rounded-sm p-5 transition-colors hover:border-primary/60">
+    <article
+      style={{ animationDelay: `${Math.min(index, 8) * 60}ms` }}
+      className="surface-panel lift-panel animate-rise group flex flex-col rounded-sm p-5 hover:border-primary/60 hover:lift-panel-hover"
+    >
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="mono-label text-primary">{op.rge}</p>
