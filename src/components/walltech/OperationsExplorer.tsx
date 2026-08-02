@@ -217,8 +217,8 @@ export function OperationsExplorer({ onDossier }: { onDossier: () => void }) {
           </div>
         ) : (
           <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {results.map((op) => (
-              <OperationCard key={op.id} op={op} onDossier={onDossier} />
+            {results.map((op, i) => (
+              <OperationCard key={op.id} op={op} index={i} onDossier={onDossier} />
             ))}
           </div>
         )}
