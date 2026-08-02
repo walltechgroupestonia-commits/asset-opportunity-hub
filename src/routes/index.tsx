@@ -2,7 +2,9 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { SiteHeader } from "@/components/walltech/SiteHeader";
 import { Hero } from "@/components/walltech/Hero";
+import { TrustBar } from "@/components/walltech/TrustBar";
 import { ChannelGrid } from "@/components/walltech/ChannelGrid";
+import { ProcessTimeline } from "@/components/walltech/ProcessTimeline";
 import { OperationsExplorer } from "@/components/walltech/OperationsExplorer";
 import { SiteFooter } from "@/components/walltech/SiteFooter";
 import { DossierDialog, DebtorDialog, PartnerDialog } from "@/components/walltech/dialogs";
@@ -36,6 +38,7 @@ function Index() {
       <SiteHeader onDossier={() => setDossier(true)} />
       <main>
         <Hero onDossier={() => setDossier(true)} onOperations={scrollToOperations} />
+        <TrustBar />
         <ChannelGrid
           onAction={(a) => {
             if (a === "operations") scrollToOperations();
@@ -43,6 +46,7 @@ function Index() {
             if (a === "partner") setPartner(true);
           }}
         />
+        <ProcessTimeline />
         <OperationsExplorer onDossier={() => setDossier(true)} />
       </main>
       <SiteFooter />

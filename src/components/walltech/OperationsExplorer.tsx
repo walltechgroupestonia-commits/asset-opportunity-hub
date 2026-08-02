@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Loader2, MapPin, Radio, RotateCcw, Search } from "lucide-react";
+import { Loader2, MapPin, RotateCcw, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -20,9 +20,12 @@ const euro = new Intl.NumberFormat("it-IT", {
 
 const DEFAULTS = { q: "", country: "all", type: "all", budget: "all", occupancy: "all" };
 
-function OperationCard({ op, onDossier }: { op: Operation; onDossier: () => void }) {
+function OperationCard({ op, onDossier, index }: { op: Operation; onDossier: () => void; index: number }) {
   return (
-    <article className="surface-panel flex flex-col rounded-sm p-5 transition-colors hover:border-primary/60">
+    <article
+      style={{ animationDelay: `${Math.min(index, 8) * 60}ms` }}
+      className="surface-panel lift-panel animate-rise group flex flex-col rounded-sm p-5 hover:border-primary/60 hover:lift-panel-hover"
+    >
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="mono-label text-primary">{op.rge}</p>
@@ -107,7 +110,8 @@ export function OperationsExplorer({ onDossier }: { onDossier: () => void }) {
             <h2 className="mt-3 text-2xl font-bold md:text-3xl">Pipeline pre-asta e giurisdizionale</h2>
           </div>
           <p className="mono-label inline-flex items-center gap-2 rounded-sm border border-success/40 px-3 py-1.5 text-success">
-            <Radio className="size-3.5" /> Sotto-sistema Ingestion: Attivo (PVP &amp; Portali Aste)
+            <span className="pulse-dot size-2 rounded-full bg-success" aria-hidden="true" />
+            Sotto-sistema Ingestion: Attivo (PVP &amp; Portali Aste)
           </p>
         </div>
 
@@ -214,8 +218,8 @@ export function OperationsExplorer({ onDossier }: { onDossier: () => void }) {
           </div>
         ) : (
           <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {results.map((op) => (
-              <OperationCard key={op.id} op={op} onDossier={onDossier} />
+            {results.map((op, i) => (
+              <OperationCard key={op.id} op={op} index={i} onDossier={onDossier} />
             ))}
           </div>
         )}

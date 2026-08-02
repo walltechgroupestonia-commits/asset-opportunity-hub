@@ -169,3 +169,102 @@
   letter-spacing: 0.18em;
   text-transform: uppercase;
 }
+
+/* ---------- Motion layer ---------- */
+
+@keyframes wt-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes wt-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes wt-pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 oklch(0.72 0.14 160 / 0.5);
+  }
+  70% {
+    opacity: 0.75;
+    box-shadow: 0 0 0 6px oklch(0.72 0.14 160 / 0);
+  }
+}
+
+@keyframes wt-sweep {
+  from {
+    transform: translateX(-120%);
+  }
+  to {
+    transform: translateX(220%);
+  }
+}
+
+@utility reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@utility reveal-in {
+  opacity: 1;
+  transform: none;
+}
+
+@utility animate-rise {
+  animation: wt-rise 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@utility animate-marquee {
+  animation: wt-marquee 38s linear infinite;
+}
+
+@utility pulse-dot {
+  animation: wt-pulse-dot 2.2s ease-out infinite;
+}
+
+@utility lift-panel {
+  transition:
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+@utility lift-panel-hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lift);
+}
+
+@utility sweep-line {
+  position: relative;
+  overflow: hidden;
+}
+
+@utility sweep-line-bar {
+  animation: wt-sweep 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
