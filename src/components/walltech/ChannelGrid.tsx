@@ -1,6 +1,7 @@
 import { ArrowRight, Building2, HandCoins, Landmark, Users } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useReveal } from "@/hooks/use-reveal";
 
 interface Channel {
   icon: LucideIcon;
@@ -42,17 +43,29 @@ const channels: Channel[] = [
 ];
 
 export function ChannelGrid({ onAction }: { onAction: (a: Channel["action"]) => void }) {
+  const { ref, visible } = useReveal<HTMLElement>();
+
   return (
-    <section id="canali" className="mx-auto max-w-7xl px-5 py-16 md:py-20">
-      <p className="mono-label text-primary">Canali operativi</p>
-      <h2 className="mt-3 text-2xl font-bold md:text-3xl">Un punto di accesso per ogni controparte</h2>
+    <section ref={ref} id="canali" className="mx-auto max-w-7xl px-5 py-16 md:py-20">
+      <p className={`mono-label reveal ${visible ? "reveal-in" : ""} text-primary`}>
+        Canali operativi
+      </p>
+      <h2
+        className={`reveal ${visible ? "reveal-in" : ""} mt-3 text-2xl font-bold md:text-3xl`}
+        style={{ transitionDelay: "80ms" }}
+      >
+        Un punto di accesso per ogni controparte
+      </h2>
       <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {channels.map((c) => (
+        {channels.map((c, i) => (
           <article
             key={c.title}
-            className="surface-panel group flex flex-col rounded-sm p-6 transition-colors hover:border-primary/60"
+            style={{ transitionDelay: `${120 + i * 90}ms` }}
+            className={`surface-panel lift-panel reveal ${visible ? "reveal-in" : ""} group flex flex-col rounded-sm p-6 hover:border-primary/60 hover:lift-panel-hover`}
           >
-            <c.icon className="size-5 text-primary" />
+            <span className="flex size-10 items-center justify-center rounded-sm border border-border bg-background transition-colors group-hover:border-primary/60">
+              <c.icon className="size-5 text-primary transition-transform duration-300 group-hover:scale-110" />
+            </span>
             <h3 className="mt-4 text-lg font-semibold">{c.title}</h3>
             <p className="mt-3 flex-1 text-sm leading-relaxed text-muted-foreground">{c.body}</p>
             <Button
@@ -62,7 +75,7 @@ export function ChannelGrid({ onAction }: { onAction: (a: Channel["action"]) => 
               onClick={() => onAction(c.action)}
             >
               {c.cta}
-              <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+              <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
             </Button>
           </article>
         ))}
