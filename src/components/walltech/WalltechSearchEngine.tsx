@@ -161,13 +161,24 @@ const DEFAULTS: SearchFilters = {
 
 type Outcome = { counts: Record<string, number>; listings: WalltechListing[] };
 
-export function WalltechSearchEngine({ onDossier }: { onDossier: () => void }) {
+export function WalltechSearchEngine({
+  onDossier,
+  onFiltersChange,
+}: {
+  onDossier: () => void;
+  onFiltersChange?: (filters: SearchFilters) => void;
+}) {
   const { ref, visible } = useReveal<HTMLElement>();
   const [filters, setFilters] = useState<SearchFilters>(DEFAULTS);
   const [loading, setLoading] = useState(false);
   const [outcome, setOutcome] = useState<Outcome | null>(null);
 
-  const set = (k: keyof SearchFilters, v: string) => setFilters((f) => ({ ...f, [k]: v }));
+  const update = (next: SearchFilters) => {
+    setFilters(next);
+    onFiltersChange?.(next);
+  };
+
+  const set = (k: keyof SearchFilters, v: string) => update({ ...filters, [k]: v });
 
   const analyze = async () => {
     setLoading(true);
@@ -284,7 +295,7 @@ export function WalltechSearchEngine({ onDossier }: { onDossier: () => void }) {
               {loading ? <Loader2 className="size-4 animate-spin" /> : <Radar className="size-4" />}
               Analizza opportunità
             </Button>
-            <Button variant="quiet" size="sm" onClick={() => setFilters(DEFAULTS)}>
+            <Button variant="quiet" size="sm" onClick={() => update(DEFAULTS)}>
               Azzera filtri
             </Button>
           </div>
