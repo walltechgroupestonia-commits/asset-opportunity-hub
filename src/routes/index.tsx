@@ -3,6 +3,7 @@ import { useState } from "react";
 import { SiteHeader } from "@/components/walltech/SiteHeader";
 import { Hero } from "@/components/walltech/Hero";
 import { TrustBar } from "@/components/walltech/TrustBar";
+import { WalltechSearchEngine } from "@/components/walltech/WalltechSearchEngine";
 import { ChannelGrid } from "@/components/walltech/ChannelGrid";
 import { ProcessTimeline } from "@/components/walltech/ProcessTimeline";
 import { OperationsExplorer } from "@/components/walltech/OperationsExplorer";
