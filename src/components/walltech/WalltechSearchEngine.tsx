@@ -295,7 +295,7 @@ export function WalltechSearchEngine({
               {loading ? <Loader2 className="size-4 animate-spin" /> : <Radar className="size-4" />}
               Analizza opportunità
             </Button>
-            <Button variant="quiet" size="sm" onClick={() => setFilters(DEFAULTS)}>
+            <Button variant="quiet" size="sm" onClick={() => update(DEFAULTS)}>
               Azzera filtri
             </Button>
           </div>
