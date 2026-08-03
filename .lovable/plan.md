@@ -1,6 +1,11 @@
 # WalltechSearchEngine — piano file per file
 
+> Nota sui percorsi: nel progetto la cartella reale è `src/components/` (al plurale).
+> `src/component/walltech/` non esiste, quindi il file va creato in
+> `src/components/walltech/WalltechSearchEngine.tsx`.
+
 ## 1. `src/components/walltech/WalltechSearchEngine.tsx` (nuovo)
+
 
 Componente modulare autonomo, nessuna dipendenza dai componenti esistenti oltre alla UI condivisa (`Button`, `Input`, `Label`, `Select`) e ai token del tema.
 
