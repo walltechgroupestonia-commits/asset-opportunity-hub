@@ -40,6 +40,7 @@ function Index() {
       <main>
         <Hero onDossier={() => setDossier(true)} onOperations={scrollToOperations} />
         <TrustBar />
+        <WalltechSearchEngine onDossier={() => setDossier(true)} />
         <ChannelGrid
           onAction={(a) => {
             if (a === "operations") scrollToOperations();
