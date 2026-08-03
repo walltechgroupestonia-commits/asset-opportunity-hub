@@ -34,6 +34,13 @@ function Index() {
   const [dossier, setDossier] = useState(false);
   const [debtor, setDebtor] = useState(false);
   const [partner, setPartner] = useState(false);
+  const [searchFilters, setSearchFilters] = useState<SearchFilters>({
+    area: "",
+    assetType: "all",
+    maxBudget: "all",
+    occupancy: "all",
+    procedure: "all",
+  });
 
   const scrollToOperations = () =>
     document.getElementById("operazioni")?.scrollIntoView({ behavior: "smooth" });
@@ -44,7 +51,11 @@ function Index() {
       <main>
         <Hero onDossier={() => setDossier(true)} onOperations={scrollToOperations} />
         <TrustBar />
-        <WalltechSearchEngine onDossier={() => setDossier(true)} />
+        <WalltechSearchEngine
+          onDossier={() => setDossier(true)}
+          onFiltersChange={setSearchFilters}
+        />
+        <LiveSourceValidation filters={searchFilters} />
         <ChannelGrid
           onAction={(a) => {
             if (a === "operations") scrollToOperations();
