@@ -107,6 +107,16 @@ export function OperationsExplorer({ onDossier }: { onDossier: () => void }) {
 
   const set = (k: keyof typeof DEFAULTS, v: string) => setFilters((f) => ({ ...f, [k]: v }));
 
+  const pvpHref = useMemo(() => {
+    const q = new URLSearchParams();
+    if (filters.q.trim()) q.set("ricerca", filters.q.trim());
+    if (filters.type !== "all") q.set("tipologia", filters.type);
+    if (filters.budget !== "all") q.set("prezzoMax", filters.budget);
+    const qs = q.toString();
+    return qs ? `${PVP_SEARCH_URL}?${qs}` : PVP_SEARCH_URL;
+  }, [filters]);
+
+
   return (
     <section id="operazioni" className="border-y border-border bg-surface/40">
       <div className="mx-auto max-w-7xl px-5 py-16 md:py-20">
