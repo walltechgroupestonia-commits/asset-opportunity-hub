@@ -145,7 +145,9 @@ export function OperationsExplorer({ onDossier }: { onDossier: () => void }) {
           </button>
         </div>
 
+        <div className="surface-panel mt-6 rounded-sm p-5">
           <div className="grid gap-4 lg:grid-cols-5">
+
             <div className="lg:col-span-1">
               <Label className="mono-label text-muted-foreground">Città, CAP o R.G.E.</Label>
               <div className="relative mt-2">
