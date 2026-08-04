@@ -73,9 +73,15 @@ function OperationCard({ op, onDossier, index }: { op: Operation; onDossier: () 
   );
 }
 
+const PVP_SEARCH_URL = "https://pvp.giustizia.it/pvp/it/ricerca.page";
+
+type DataMode = "demo" | "live";
+
 export function OperationsExplorer({ onDossier }: { onDossier: () => void }) {
   const [filters, setFilters] = useState(DEFAULTS);
   const [loading, setLoading] = useState(false);
+  const [mode, setMode] = useState<DataMode>("demo");
+
 
   useEffect(() => {
     setLoading(true);
