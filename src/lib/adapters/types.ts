@@ -43,3 +43,34 @@ export interface SourceAdapter {
   buildSearchRequest(filters: HandoffFilters): SearchHandoff | null;
   disconnect(): void;
 }
+
+export interface PartnerFeedCredentials {
+  apiKey?: string;
+  endpoint?: string;
+  token?: string;
+}
+
+export interface NormalizedListing {
+  id: string;
+  title: string;
+  area: string;
+  assetType: string;
+  basePrice: number;
+  occupancy: string;
+  procedure: string;
+  sourceUrl: string;
+}
+
+/**
+ * Contract for a future authorized partner feed / API.
+ * No implementation exists yet: live results are never simulated.
+ */
+export interface PartnerFeedAdapter {
+  id: string;
+  name: string;
+  connect(credentials: PartnerFeedCredentials): Promise<ConnectionTestResult>;
+  search(filters: HandoffFilters): Promise<NormalizedListing[]>;
+  normalize(results: unknown[]): NormalizedListing[];
+  disconnect(): void;
+}
+
