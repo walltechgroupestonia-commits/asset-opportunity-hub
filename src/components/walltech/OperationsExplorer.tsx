@@ -115,13 +115,36 @@ export function OperationsExplorer({ onDossier }: { onDossier: () => void }) {
             <p className="mono-label text-primary">Ricerca avanzata &amp; filtri operazioni</p>
             <h2 className="mt-3 text-2xl font-bold md:text-3xl">Pipeline pre-asta e giurisdizionale</h2>
           </div>
-          <p className="mono-label inline-flex items-center gap-2 rounded-sm border border-success/40 px-3 py-1.5 text-success">
-            <span className="pulse-dot size-2 rounded-full bg-success" aria-hidden="true" />
-            Sotto-sistema Ingestion: Attivo (PVP &amp; Portali Aste)
+          <p className="mono-label max-w-sm rounded-sm border border-primary/40 px-3 py-1.5 text-primary">
+            Connessione sorgente verificata — dati live non ancora autorizzati
           </p>
         </div>
 
-        <div className="surface-panel mt-8 rounded-sm p-5">
+        <div className="mt-6 flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setMode("demo")}
+            className={`mono-label rounded-sm border px-3 py-2 transition-colors ${
+              mode === "demo"
+                ? "border-primary/60 bg-primary/10 text-primary"
+                : "border-border text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            Demo dataset
+          </button>
+          <button
+            type="button"
+            onClick={() => setMode("live")}
+            className={`mono-label rounded-sm border px-3 py-2 transition-colors ${
+              mode === "live"
+                ? "border-primary/60 bg-primary/10 text-primary"
+                : "border-border text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            Live partner feed
+          </button>
+        </div>
+
           <div className="grid gap-4 lg:grid-cols-5">
             <div className="lg:col-span-1">
               <Label className="mono-label text-muted-foreground">Città, CAP o R.G.E.</Label>
