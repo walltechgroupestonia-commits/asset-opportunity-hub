@@ -64,11 +64,11 @@ function Index() {
           }}
         />
         <ProcessTimeline />
-        <OperationsExplorer onDossier={() => setDossier(true)} />
+        <OperationsExplorer onDossier={openDossier} />
       </main>
       <SiteFooter />
 
-      <DossierDialog open={dossier} onOpenChange={setDossier} />
+
       <DebtorDialog open={debtor} onOpenChange={setDebtor} />
       <PartnerDialog open={partner} onOpenChange={setPartner} />
     </div>
