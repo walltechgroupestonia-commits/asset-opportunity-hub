@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { SiteHeader } from "@/components/walltech/SiteHeader";
 import { Hero } from "@/components/walltech/Hero";
@@ -13,7 +13,7 @@ import { ChannelGrid } from "@/components/walltech/ChannelGrid";
 import { ProcessTimeline } from "@/components/walltech/ProcessTimeline";
 import { OperationsExplorer } from "@/components/walltech/OperationsExplorer";
 import { SiteFooter } from "@/components/walltech/SiteFooter";
-import { DossierDialog, DebtorDialog, PartnerDialog } from "@/components/walltech/dialogs";
+import { DebtorDialog, PartnerDialog } from "@/components/walltech/dialogs";
 
 const TITLE = "WALLTECH GROUP OÜ — Intelligence Platform";
 const DESCRIPTION =
@@ -32,7 +32,8 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const [dossier, setDossier] = useState(false);
+  const navigate = useNavigate();
+  const openDossier = () => void navigate({ to: "/dossier" });
   const [debtor, setDebtor] = useState(false);
   const [partner, setPartner] = useState(false);
   const [searchFilters, setSearchFilters] = useState<SearchFilters>({
@@ -48,15 +49,12 @@ function Index() {
 
   return (
     <div className="min-h-screen bg-background">
-      <SiteHeader onDossier={() => setDossier(true)} />
+      <SiteHeader onDossier={openDossier} />
       <main>
-        <Hero onDossier={() => setDossier(true)} onOperations={scrollToOperations} />
+        <Hero onDossier={openDossier} onOperations={scrollToOperations} />
         <TrustBar />
         <WalltechDecisionEngine />
-        <WalltechSearchEngine
-          onDossier={() => setDossier(true)}
-          onFiltersChange={setSearchFilters}
-        />
+        <WalltechSearchEngine onDossier={openDossier} onFiltersChange={setSearchFilters} />
         <LiveSourceValidation filters={searchFilters} />
         <ChannelGrid
           onAction={(action) => {
@@ -66,11 +64,11 @@ function Index() {
           }}
         />
         <ProcessTimeline />
-        <OperationsExplorer onDossier={() => setDossier(true)} />
+        <OperationsExplorer onDossier={openDossier} />
       </main>
       <SiteFooter />
 
-      <DossierDialog open={dossier} onOpenChange={setDossier} />
+
       <DebtorDialog open={debtor} onOpenChange={setDebtor} />
       <PartnerDialog open={partner} onOpenChange={setPartner} />
     </div>
