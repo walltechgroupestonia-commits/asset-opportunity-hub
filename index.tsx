@@ -5,7 +5,11 @@ import { Hero } from "@/components/walltech/Hero";
 import { TrustBar } from "@/components/walltech/TrustBar";
 import { WalltechDecisionEngine } from "@/components/walltech/WalltechDecisionEngine";
 import { OperatingSystem } from "@/components/walltech/OperatingSystem";
-import { WalltechSearchEngine, type SearchFilters } from "@/components/walltech/WalltechSearchEngine";
+import { PropertyIntelligence } from "@/components/walltech/PropertyIntelligence";
+import {
+  WalltechSearchEngine,
+  type SearchFilters,
+} from "@/components/walltech/WalltechSearchEngine";
 import { DataSourceTransparency } from "@/components/walltech/DataSourceTransparency";
 import { LiveSourceValidation } from "@/components/walltech/LiveSourceValidation";
 import { ChannelGrid } from "@/components/walltech/ChannelGrid";
@@ -15,7 +19,8 @@ import { SiteFooter } from "@/components/walltech/SiteFooter";
 import { DossierDialog, DebtorDialog, PartnerDialog } from "@/components/walltech/dialogs";
 
 const TITLE = "WALLTECH GROUP OÜ — Intelligence Platform";
-const DESCRIPTION = "Piattaforma operativa per l'analisi, la qualificazione e la gestione di operazioni immobiliari complesse, NPL e pre-asta.";
+const DESCRIPTION =
+  "Piattaforma operativa per l'analisi, la qualificazione e la gestione di operazioni immobiliari complesse, NPL e pre-asta.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -52,7 +57,11 @@ function Index() {
         <TrustBar />
         <WalltechDecisionEngine />
         <OperatingSystem />
-        <WalltechSearchEngine onDossier={() => setDossier(true)} onFiltersChange={setSearchFilters} />
+        <PropertyIntelligence />
+        <WalltechSearchEngine
+          onDossier={() => setDossier(true)}
+          onFiltersChange={setSearchFilters}
+        />
         <DataSourceTransparency />
         <LiveSourceValidation filters={searchFilters} />
         <ChannelGrid
@@ -66,6 +75,7 @@ function Index() {
         <OperationsExplorer onDossier={() => setDossier(true)} />
       </main>
       <SiteFooter />
+
       <DossierDialog open={dossier} onOpenChange={setDossier} />
       <DebtorDialog open={debtor} onOpenChange={setDebtor} />
       <PartnerDialog open={partner} onOpenChange={setPartner} />
