@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Loader2, MapPin, RotateCcw, Search } from "lucide-react";
+import { ExternalLink, Loader2, MapPin, RotateCcw, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -73,9 +73,15 @@ function OperationCard({ op, onDossier, index }: { op: Operation; onDossier: () 
   );
 }
 
+const PVP_SEARCH_URL = "https://pvp.giustizia.it/pvp/it/ricerca.page";
+
+type DataMode = "demo" | "live";
+
 export function OperationsExplorer({ onDossier }: { onDossier: () => void }) {
   const [filters, setFilters] = useState(DEFAULTS);
   const [loading, setLoading] = useState(false);
+  const [mode, setMode] = useState<DataMode>("demo");
+
 
   useEffect(() => {
     setLoading(true);
@@ -101,6 +107,16 @@ export function OperationsExplorer({ onDossier }: { onDossier: () => void }) {
 
   const set = (k: keyof typeof DEFAULTS, v: string) => setFilters((f) => ({ ...f, [k]: v }));
 
+  const pvpHref = useMemo(() => {
+    const q = new URLSearchParams();
+    if (filters.q.trim()) q.set("ricerca", filters.q.trim());
+    if (filters.type !== "all") q.set("tipologia", filters.type);
+    if (filters.budget !== "all") q.set("prezzoMax", filters.budget);
+    const qs = q.toString();
+    return qs ? `${PVP_SEARCH_URL}?${qs}` : PVP_SEARCH_URL;
+  }, [filters]);
+
+
   return (
     <section id="operazioni" className="border-y border-border bg-surface/40">
       <div className="mx-auto max-w-7xl px-5 py-16 md:py-20">
@@ -109,14 +125,39 @@ export function OperationsExplorer({ onDossier }: { onDossier: () => void }) {
             <p className="mono-label text-primary">Ricerca avanzata &amp; filtri operazioni</p>
             <h2 className="mt-3 text-2xl font-bold md:text-3xl">Pipeline pre-asta e giurisdizionale</h2>
           </div>
-          <p className="mono-label inline-flex items-center gap-2 rounded-sm border border-success/40 px-3 py-1.5 text-success">
-            <span className="pulse-dot size-2 rounded-full bg-success" aria-hidden="true" />
-            Sotto-sistema Ingestion: Attivo (PVP &amp; Portali Aste)
+          <p className="mono-label max-w-sm rounded-sm border border-primary/40 px-3 py-1.5 text-primary">
+            Connessione sorgente verificata — dati live non ancora autorizzati
           </p>
         </div>
 
-        <div className="surface-panel mt-8 rounded-sm p-5">
+        <div className="mt-6 flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setMode("demo")}
+            className={`mono-label rounded-sm border px-3 py-2 transition-colors ${
+              mode === "demo"
+                ? "border-primary/60 bg-primary/10 text-primary"
+                : "border-border text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            Demo dataset
+          </button>
+          <button
+            type="button"
+            onClick={() => setMode("live")}
+            className={`mono-label rounded-sm border px-3 py-2 transition-colors ${
+              mode === "live"
+                ? "border-primary/60 bg-primary/10 text-primary"
+                : "border-border text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            Live partner feed
+          </button>
+        </div>
+
+        <div className="surface-panel mt-6 rounded-sm p-5">
           <div className="grid gap-4 lg:grid-cols-5">
+
             <div className="lg:col-span-1">
               <Label className="mono-label text-muted-foreground">Città, CAP o R.G.E.</Label>
               <div className="relative mt-2">
@@ -191,38 +232,78 @@ export function OperationsExplorer({ onDossier }: { onDossier: () => void }) {
           </div>
 
           <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-border pt-4">
-            <Button variant="quiet" size="sm" onClick={() => setFilters(DEFAULTS)}>
-              <RotateCcw className="size-3.5" /> Azzera tutti i filtri
-            </Button>
-            <span className="mono-label inline-flex items-center gap-2 text-muted-foreground">
-              {loading ? (
-                <>
-                  <Loader2 className="size-3.5 animate-spin" /> Caricamento…
-                </>
-              ) : (
-                `${results.length} operazioni in pipeline`
-              )}
-            </span>
+            <div className="flex flex-wrap items-center gap-2">
+              <Button variant="quiet" size="sm" onClick={() => setFilters(DEFAULTS)}>
+                <RotateCcw className="size-3.5" /> Azzera tutti i filtri
+              </Button>
+              <Button asChild variant="signal" size="sm">
+                <a href={pvpHref} target="_blank" rel="noopener noreferrer">
+                  Continua la ricerca sul PVP ufficiale
+                  <ExternalLink className="size-3.5" />
+                </a>
+              </Button>
+            </div>
+            {mode === "demo" ? (
+              <span className="mono-label inline-flex items-center gap-2 text-muted-foreground">
+                {loading ? (
+                  <>
+                    <Loader2 className="size-3.5 animate-spin" /> Caricamento…
+                  </>
+                ) : (
+                  `${results.length} risultati demo`
+                )}
+              </span>
+            ) : (
+              <span className="mono-label text-muted-foreground">Nessun risultato live disponibile</span>
+            )}
           </div>
         </div>
 
-        {!loading && results.length === 0 ? (
-          <div className="surface-panel mt-8 rounded-sm px-6 py-16 text-center">
-            <h3 className="text-lg font-semibold">Nessuna operazione trovata</h3>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Prova a modificare i parametri di ricerca o ad azzerare i filtri.
+        {mode === "live" ? (
+          <div className="surface-panel mt-8 rounded-sm p-6">
+            <h3 className="text-lg font-semibold">In attesa di feed/API autorizzata</h3>
+            <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+              In questa modalità non vengono mostrate card dimostrative. I risultati saranno
+              disponibili solo dopo l'attivazione di un feed o di una API autorizzata dal partner.
             </p>
-            <Button variant="signal" className="mt-6" onClick={() => setFilters(DEFAULTS)}>
-              Mostra Tutte le Operazioni
-            </Button>
+            <div className="mt-5 grid gap-3 md:grid-cols-3">
+              {[
+                ["Stato PVP", "SOURCE REACHABLE"],
+                ["Feed dati", "FEED NOT AUTHORIZED"],
+                ["Requisito", "AGREEMENT REQUIRED"],
+              ].map(([label, value]) => (
+                <div key={label} className="rounded-sm border border-border bg-background px-3 py-2.5">
+                  <p className="mono-label text-muted-foreground">{label}</p>
+                  <p className="mono-label mt-1 text-primary">{value}</p>
+                </div>
+              ))}
+            </div>
           </div>
         ) : (
-          <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {results.map((op, i) => (
-              <OperationCard key={op.id} op={op} index={i} onDossier={onDossier} />
-            ))}
-          </div>
+          <>
+            <p className="mono-label mt-8 text-muted-foreground">
+              Dati dimostrativi non provenienti dal PVP
+            </p>
+            {!loading && results.length === 0 ? (
+              <div className="surface-panel mt-4 rounded-sm px-6 py-16 text-center">
+                <h3 className="text-lg font-semibold">Nessuna operazione trovata</h3>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Prova a modificare i parametri di ricerca o ad azzerare i filtri.
+                </p>
+                <Button variant="signal" className="mt-6" onClick={() => setFilters(DEFAULTS)}>
+                  Mostra Tutte le Operazioni
+                </Button>
+              </div>
+            ) : (
+              <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                {results.map((op, i) => (
+                  <OperationCard key={op.id} op={op} index={i} onDossier={onDossier} />
+                ))}
+              </div>
+            )}
+          </>
         )}
+
       </div>
     </section>
   );
