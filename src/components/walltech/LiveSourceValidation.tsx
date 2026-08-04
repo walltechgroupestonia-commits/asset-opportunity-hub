@@ -135,7 +135,7 @@ export function LiveSourceValidation({ filters }: { filters: HandoffFilters }) {
             </span>
           </div>
 
-          <div className="mt-5 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-5 grid gap-3 md:grid-cols-2 lg:grid-cols-4">
             <Row label="HTTP status" value={result?.httpStatus ? String(result.httpStatus) : "—"} />
             <Row
               label="Latenza"
@@ -145,14 +145,13 @@ export function LiveSourceValidation({ filters }: { filters: HandoffFilters }) {
               label="Timestamp"
               value={result ? new Date(result.timestamp).toLocaleString("it-IT") : "—"}
             />
-            <Row label="URL sorgente" value={result?.sourceUrl ?? "—"} />
-            <Row label="Tipo di connessione" value={result?.connectionType ?? "—"} />
-            <Row label="Modalità corrente" value={result?.mode ?? "—"} />
+            <Row label="URL verificato" value={result?.sourceUrl ?? "—"} />
           </div>
 
-          {result?.note ? (
-            <p className="mt-4 text-sm text-muted-foreground">{result.note}</p>
-          ) : null}
+          <p className="mono-label mt-4 text-muted-foreground">
+            Raggiungibilità verificata — nessun annuncio acquisito
+          </p>
+
         </div>
 
         {result ? (
