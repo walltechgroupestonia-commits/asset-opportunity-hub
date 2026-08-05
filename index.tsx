@@ -1,11 +1,13 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { SiteHeader } from "@/components/walltech/SiteHeader";
+import { PlatformNavigation } from "@/components/walltech/PlatformNavigation";
 import { Hero } from "@/components/walltech/Hero";
 import { TrustBar } from "@/components/walltech/TrustBar";
 import { WalltechDecisionEngine } from "@/components/walltech/WalltechDecisionEngine";
 import { OperatingSystem } from "@/components/walltech/OperatingSystem";
 import { PropertyIntelligence } from "@/components/walltech/PropertyIntelligence";
+import { DedicatedServices } from "@/components/walltech/DedicatedServices";
 import {
   WalltechSearchEngine,
   type SearchFilters,
@@ -15,12 +17,13 @@ import { LiveSourceValidation } from "@/components/walltech/LiveSourceValidation
 import { ChannelGrid } from "@/components/walltech/ChannelGrid";
 import { ProcessTimeline } from "@/components/walltech/ProcessTimeline";
 import { OperationsExplorer } from "@/components/walltech/OperationsExplorer";
+import { PlatformFooterMap } from "@/components/walltech/PlatformFooterMap";
 import { SiteFooter } from "@/components/walltech/SiteFooter";
-import { DossierDialog, DebtorDialog, PartnerDialog } from "@/components/walltech/dialogs";
+import { DebtorDialog, PartnerDialog } from "@/components/walltech/dialogs";
 
 const TITLE = "WALLTECH GROUP OÜ — Intelligence Platform";
 const DESCRIPTION =
-  "Piattaforma operativa per l'analisi, la qualificazione e la gestione di operazioni immobiliari complesse, NPL e pre-asta.";
+  "Piattaforma operativa per analisi, qualificazione, dossier e gestione di operazioni immobiliari, NPL e asset complessi.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -35,7 +38,8 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const [dossier, setDossier] = useState(false);
+  const navigate = useNavigate();
+  const openDossier = () => void navigate({ to: "/dossier" });
   const [debtor, setDebtor] = useState(false);
   const [partner, setPartner] = useState(false);
   const [searchFilters, setSearchFilters] = useState<SearchFilters>({
@@ -51,32 +55,36 @@ function Index() {
 
   return (
     <div className="min-h-screen bg-background">
-      <SiteHeader onDossier={() => setDossier(true)} />
+      <SiteHeader onDossier={openDossier} />
+      <PlatformNavigation />
+
       <main>
-        <Hero onDossier={() => setDossier(true)} onOperations={scrollToOperations} />
+        <Hero onDossier={openDossier} onOperations={scrollToOperations} />
         <TrustBar />
         <WalltechDecisionEngine />
         <OperatingSystem />
         <PropertyIntelligence />
+        <DedicatedServices />
         <WalltechSearchEngine
-          onDossier={() => setDossier(true)}
+          onDossier={openDossier}
           onFiltersChange={setSearchFilters}
         />
         <DataSourceTransparency />
         <LiveSourceValidation filters={searchFilters} />
         <ChannelGrid
-          onAction={(a) => {
-            if (a === "operations") scrollToOperations();
-            if (a === "debtor") setDebtor(true);
-            if (a === "partner") setPartner(true);
+          onAction={(action) => {
+            if (action === "operations") scrollToOperations();
+            if (action === "debtor") setDebtor(true);
+            if (action === "partner") setPartner(true);
           }}
         />
         <ProcessTimeline />
-        <OperationsExplorer onDossier={() => setDossier(true)} />
+        <OperationsExplorer onDossier={openDossier} />
       </main>
+
+      <PlatformFooterMap />
       <SiteFooter />
 
-      <DossierDialog open={dossier} onOpenChange={setDossier} />
       <DebtorDialog open={debtor} onOpenChange={setDebtor} />
       <PartnerDialog open={partner} onOpenChange={setPartner} />
     </div>
