@@ -1,10 +1,11 @@
+import type { ReactNode } from "react";
 import { Building2, FileSearch2, Landmark, Network, Scale, Waypoints } from "lucide-react";
 
 interface ModuleCardProps {
   title: string;
   description: string;
   status: string;
-  icon: React.ReactNode;
+  icon: ReactNode;
   href: string;
 }
 

@@ -1,3 +1,4 @@
+import type { ComponentType } from "react";
 import {
   BriefcaseBusiness,
   Building2,
@@ -11,7 +12,7 @@ interface ServiceCardProps {
   description: string;
   cta: string;
   href: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: ComponentType<{ className?: string }>;
 }
 
 function ServiceCard({

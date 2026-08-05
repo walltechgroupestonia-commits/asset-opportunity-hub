@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import type { ComponentType } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -30,7 +31,7 @@ interface RouteResult {
   description: string;
   cta: string;
   href: string;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: ComponentType<{ className?: string }>;
 }
 
 const profiles = [
