@@ -2,17 +2,16 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { SiteHeader } from "@/components/walltech/SiteHeader";
 import { PlatformNavigation } from "@/components/walltech/PlatformNavigation";
-import { Hero } from "@/components/walltech/Hero";
+import { CorporateHero } from "@/components/walltech/CorporateHero";
 import { TrustBar } from "@/components/walltech/TrustBar";
-import { WalltechDecisionEngine } from "@/components/walltech/WalltechDecisionEngine";
-import { OperatingSystem } from "@/components/walltech/OperatingSystem";
-import { PropertyIntelligence } from "@/components/walltech/PropertyIntelligence";
-import { DedicatedServices } from "@/components/walltech/DedicatedServices";
+import { WalltechEcosystem } from "@/components/walltech/WalltechEcosystem";
+import { ChooseYourPath } from "@/components/walltech/ChooseYourPath";
+import { IntelligenceEngineShowcase } from "@/components/walltech/IntelligenceEngineShowcase";
+import { EstoniaGatewaySection } from "@/components/walltech/EstoniaGatewaySection";
 import {
   WalltechSearchEngine,
   type SearchFilters,
 } from "@/components/walltech/WalltechSearchEngine";
-import { DataSourceTransparency } from "@/components/walltech/DataSourceTransparency";
 import { LiveSourceValidation } from "@/components/walltech/LiveSourceValidation";
 import { ChannelGrid } from "@/components/walltech/ChannelGrid";
 import { ProcessTimeline } from "@/components/walltech/ProcessTimeline";
@@ -21,9 +20,9 @@ import { PlatformFooterMap } from "@/components/walltech/PlatformFooterMap";
 import { SiteFooter } from "@/components/walltech/SiteFooter";
 import { DebtorDialog, PartnerDialog } from "@/components/walltech/dialogs";
 
-const TITLE = "WALLTECH GROUP OÜ — Intelligence Platform";
+const TITLE = "WALLTECH GROUP OÜ — European Business Ecosystem";
 const DESCRIPTION =
-  "Piattaforma operativa per analisi, qualificazione, dossier e gestione di operazioni immobiliari, NPL e asset complessi.";
+  "Fiscal Assets, NPL, Real Estate, Corporate Advisory, Estonia Gateway and Walltech Intelligence Engine.";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -52,9 +51,9 @@ function Index() {
   });
 
   const scrollToOperations = () =>
-    document
-      .getElementById("operazioni")
-      ?.scrollIntoView({ behavior: "smooth" });
+    document.getElementById("operazioni")?.scrollIntoView({
+      behavior: "smooth",
+    });
 
   return (
     <div className="min-h-screen bg-background">
@@ -62,18 +61,23 @@ function Index() {
       <PlatformNavigation />
 
       <main>
-        <Hero onDossier={openDossier} onOperations={scrollToOperations} />
+        <CorporateHero
+          onDossier={openDossier}
+          onOperations={scrollToOperations}
+        />
         <TrustBar />
-        <WalltechDecisionEngine />
-        <OperatingSystem />
-        <PropertyIntelligence />
-        <DedicatedServices />
+        <WalltechEcosystem />
+        <ChooseYourPath />
+        <IntelligenceEngineShowcase />
+        <EstoniaGatewaySection />
+
         <WalltechSearchEngine
           onDossier={openDossier}
           onFiltersChange={setSearchFilters}
         />
-        <DataSourceTransparency />
+
         <LiveSourceValidation filters={searchFilters} />
+
         <ChannelGrid
           onAction={(action) => {
             if (action === "operations") scrollToOperations();
@@ -81,6 +85,7 @@ function Index() {
             if (action === "partner") setPartner(true);
           }}
         />
+
         <ProcessTimeline />
         <OperationsExplorer onDossier={openDossier} />
       </main>
