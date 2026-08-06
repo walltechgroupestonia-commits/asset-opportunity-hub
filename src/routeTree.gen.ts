@@ -14,6 +14,7 @@ import { Route as AssessmentRouteImport } from './routes/assessment'
 import { Route as CrmRouteImport } from './routes/crm'
 import { Route as DecisionRouteImport } from './routes/decision'
 import { Route as DossierRouteImport } from './routes/dossier'
+import { Route as InvestorRouteImport } from './routes/investor'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,6 +41,11 @@ const DossierRoute = DossierRouteImport.update({
   path: '/dossier',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InvestorRoute = InvestorRouteImport.update({
+  id: '/investor',
+  path: '/investor',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -47,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/crm': typeof CrmRoute
   '/decision': typeof DecisionRoute
   '/dossier': typeof DossierRoute
+  '/investor': typeof InvestorRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +61,7 @@ export interface FileRoutesByTo {
   '/crm': typeof CrmRoute
   '/decision': typeof DecisionRoute
   '/dossier': typeof DossierRoute
+  '/investor': typeof InvestorRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,13 +70,22 @@ export interface FileRoutesById {
   '/crm': typeof CrmRoute
   '/decision': typeof DecisionRoute
   '/dossier': typeof DossierRoute
+  '/investor': typeof InvestorRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/assessment' | '/crm' | '/decision' | '/dossier'
+  fullPaths:
+    '/' | '/assessment' | '/crm' | '/decision' | '/dossier' | '/investor'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/assessment' | '/crm' | '/decision' | '/dossier'
-  id: '__root__' | '/' | '/assessment' | '/crm' | '/decision' | '/dossier'
+  to: '/' | '/assessment' | '/crm' | '/decision' | '/dossier' | '/investor'
+  id:
+    | '__root__'
+    | '/'
+    | '/assessment'
+    | '/crm'
+    | '/decision'
+    | '/dossier'
+    | '/investor'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -77,6 +94,7 @@ export interface RootRouteChildren {
   CrmRoute: typeof CrmRoute
   DecisionRoute: typeof DecisionRoute
   DossierRoute: typeof DossierRoute
+  InvestorRoute: typeof InvestorRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -116,6 +134,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DossierRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/investor': {
+      id: '/investor'
+      path: '/investor'
+      fullPath: '/investor'
+      preLoaderRoute: typeof InvestorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -125,6 +150,7 @@ const rootRouteChildren: RootRouteChildren = {
   CrmRoute: CrmRoute,
   DecisionRoute: DecisionRoute,
   DossierRoute: DossierRoute,
+  InvestorRoute: InvestorRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
