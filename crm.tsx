@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { CrmIntelligence } from "@/components/walltech/CrmIntelligence";
+import { CrmIntelligenceMvp } from "@/components/walltech/CrmIntelligenceMvp";
 
 const TITLE = "Walltech CRM Intelligence";
 const DESCRIPTION =
-  "Dashboard operativa per lead, opportunità, owner, scadenze, evidenze e closing.";
+  "CRM operativo per pipeline, owner, next action, evidence, fee e closing.";
 
 export const Route = createFileRoute("/crm")({
   head: () => ({
@@ -14,5 +14,5 @@ export const Route = createFileRoute("/crm")({
       { property: "og:description", content: DESCRIPTION },
     ],
   }),
-  component: CrmIntelligence,
+  component: CrmIntelligenceMvp,
 });
