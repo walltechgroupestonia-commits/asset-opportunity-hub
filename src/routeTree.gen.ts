@@ -10,11 +10,29 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AssessmentRouteImport } from './routes/assessment'
+import { Route as CrmRouteImport } from './routes/crm'
+import { Route as DecisionRouteImport } from './routes/decision'
 import { Route as DossierRouteImport } from './routes/dossier'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AssessmentRoute = AssessmentRouteImport.update({
+  id: '/assessment',
+  path: '/assessment',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CrmRoute = CrmRouteImport.update({
+  id: '/crm',
+  path: '/crm',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DecisionRoute = DecisionRouteImport.update({
+  id: '/decision',
+  path: '/decision',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DossierRoute = DossierRouteImport.update({
@@ -25,27 +43,39 @@ const DossierRoute = DossierRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/assessment': typeof AssessmentRoute
+  '/crm': typeof CrmRoute
+  '/decision': typeof DecisionRoute
   '/dossier': typeof DossierRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/assessment': typeof AssessmentRoute
+  '/crm': typeof CrmRoute
+  '/decision': typeof DecisionRoute
   '/dossier': typeof DossierRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/assessment': typeof AssessmentRoute
+  '/crm': typeof CrmRoute
+  '/decision': typeof DecisionRoute
   '/dossier': typeof DossierRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dossier'
+  fullPaths: '/' | '/assessment' | '/crm' | '/decision' | '/dossier'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dossier'
-  id: '__root__' | '/' | '/dossier'
+  to: '/' | '/assessment' | '/crm' | '/decision' | '/dossier'
+  id: '__root__' | '/' | '/assessment' | '/crm' | '/decision' | '/dossier'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AssessmentRoute: typeof AssessmentRoute
+  CrmRoute: typeof CrmRoute
+  DecisionRoute: typeof DecisionRoute
   DossierRoute: typeof DossierRoute
 }
 
@@ -56,6 +86,27 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assessment': {
+      id: '/assessment'
+      path: '/assessment'
+      fullPath: '/assessment'
+      preLoaderRoute: typeof AssessmentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crm': {
+      id: '/crm'
+      path: '/crm'
+      fullPath: '/crm'
+      preLoaderRoute: typeof CrmRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/decision': {
+      id: '/decision'
+      path: '/decision'
+      fullPath: '/decision'
+      preLoaderRoute: typeof DecisionRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/dossier': {
@@ -70,6 +121,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AssessmentRoute: AssessmentRoute,
+  CrmRoute: CrmRoute,
+  DecisionRoute: DecisionRoute,
   DossierRoute: DossierRoute,
 }
 export const routeTree = rootRouteImport
