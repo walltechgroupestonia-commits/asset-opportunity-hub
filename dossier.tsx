@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { WalltechDossier } from "@/components/walltech/WalltechDossier";
+import { DossierGeneratorMvp } from "@/components/walltech/DossierGeneratorMvp";
 
-const TITLE = "Walltech Operation Dossier";
+const TITLE = "Walltech Dossier Generator";
 const DESCRIPTION =
-  "Dossier operativo preliminare per la qualificazione e il coordinamento di operazioni immobiliari complesse.";
+  "Dossier operativo integrato con business case, scoring, document status e decision output.";
 
 export const Route = createFileRoute("/dossier")({
   head: () => ({
@@ -14,5 +14,5 @@ export const Route = createFileRoute("/dossier")({
       { property: "og:description", content: DESCRIPTION },
     ],
   }),
-  component: WalltechDossier,
+  component: DossierGeneratorMvp,
 });
