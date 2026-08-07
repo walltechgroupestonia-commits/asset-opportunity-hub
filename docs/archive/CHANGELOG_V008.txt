@@ -1,0 +1,21 @@
+PATCH V008 — CRM INTELLIGENCE
+
+Nuovi file:
+- src/components/walltech/CrmIntelligence.tsx
+- src/routes/crm.tsx
+
+Nuova route:
+- /crm
+
+Funzioni:
+- KPI commerciali e produttivi
+- Pipeline Lead → Closing
+- Control panel operativo
+- Opportunità con owner, prossima azione e scadenza
+- Evidence
+- Time to Revenue
+- Collegamento ai dossier
+- Disclaimer professionale permanente
+
+Commit message:
+feat: add CRM intelligence route
