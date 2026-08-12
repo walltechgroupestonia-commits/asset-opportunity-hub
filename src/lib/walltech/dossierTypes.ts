@@ -3,10 +3,10 @@ export interface DossierData {
   title: string;
   location: string;
   assetType: string;
-  estimatedValue: number;
-  acquisitionCost: number;
-  operatingCosts: number;
-  exitValue: number;
+  estimatedValue: number | null;
+  acquisitionCost: number | null;
+  operatingCosts: number | null;
+  exitValue: number | null;
   opportunityScore: number;
   riskScore: number;
   condition: string;
@@ -23,7 +23,7 @@ export interface DossierData {
 }
 
 export interface DossierMetrics {
-  totalInvestment: number;
-  grossMargin: number;
-  roi: number;
+  totalInvestment: number | null;
+  grossMargin: number | null;
+  roi: number | null;
 }

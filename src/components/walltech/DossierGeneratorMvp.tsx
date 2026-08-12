@@ -13,38 +13,44 @@ import {
   dossierCompletion,
 } from "@/lib/walltech/dossierEngine";
 import type { DossierData } from "@/lib/walltech/dossierTypes";
+import { imperia1312024 } from "@/data/imperia1312024";
+import { analyzePropertyOpportunity } from "@/lib/walltech/propertyIntelligenceEngine";
+
+const propertyAnalysis = analyzePropertyOpportunity(imperia1312024);
 
 const initialData: DossierData = {
-  operationCode: "WT-IT-MI-001",
-  title: "Operazione immobiliare pre-asta",
-  location: "Milano, Lombardia",
-  assetType: "Residenziale",
-  estimatedValue: 305000,
-  acquisitionCost: 187500,
-  operatingCosts: 22000,
-  exitValue: 305000,
-  opportunityScore: 84,
-  riskScore: 32,
-  condition: "EMERGENCY",
-  readiness: "REVIEW",
-  priority: "HIGH",
+  operationCode: imperia1312024.opportunityId,
+  title: imperia1312024.title,
+  location: `${imperia1312024.asset.city.value}, ${imperia1312024.asset.province.value}`,
+  assetType: imperia1312024.asset.propertyType.value ?? "DATO MANCANTE",
+  estimatedValue: null,
+  acquisitionCost: imperia1312024.assumptions.targetPurchasePrice,
+  operatingCosts: null,
+  exitValue: imperia1312024.assumptions.expectedSalePrice,
+  opportunityScore: propertyAnalysis.opportunityScore,
+  riskScore: propertyAnalysis.riskScore,
+  condition: "DA ASSEGNARE",
+  readiness: propertyAnalysis.decision,
+  priority: propertyAnalysis.riskScore >= 85 ? "CRITICAL" : "REVIEW",
   owner: "Walltech Property Team",
-  deadline: "Entro 48 ore",
-  nextAction:
-    "Completare la verifica urbanistica e aggiornare l'evidence documentale.",
-  evidenceRequired:
-    "Relazione tecnica firmata e checklist documentale aggiornata.",
+  deadline: imperia1312024.procedure.offerDeadline.value ?? "DATO MANCANTE",
+  nextAction: propertyAnalysis.requiredNextChecks[0] ?? "NESSUNA AZIONE DISPONIBILE",
+  evidenceRequired: imperia1312024.missingDocuments.join("; "),
   documents: [
-    { label: "Perizia CTU", status: "AVAILABLE" },
-    { label: "Visura catastale", status: "AVAILABLE" },
-    { label: "Ispezione ipotecaria", status: "PARTIAL" },
-    { label: "Planimetria", status: "AVAILABLE" },
-    { label: "Verifica urbanistica", status: "MISSING" },
-    { label: "Documentazione fotografica", status: "PARTIAL" },
+    ...imperia1312024.availableDocuments.map((label) => ({
+      label,
+      status: "AVAILABLE" as const,
+    })),
+    ...imperia1312024.missingDocuments.map((label) => ({
+      label,
+      status: "MISSING" as const,
+    })),
   ],
 };
 
-function euro(value: number) {
+function euro(value: number | null) {
+  if (value === null) return "DATO MANCANTE";
+
   return new Intl.NumberFormat("it-IT", {
     style: "currency",
     currency: "EUR",
@@ -236,7 +242,7 @@ export function DossierGeneratorMvp() {
                 ["Investimento totale", euro(metrics.totalInvestment)],
                 ["Exit value", euro(data.exitValue)],
                 ["Margine lordo", euro(metrics.grossMargin)],
-                ["ROI indicativo", `${metrics.roi.toFixed(1)}%`],
+                ["ROI indicativo", metrics.roi === null ? "DATO MANCANTE" : `${metrics.roi.toFixed(1)}%`],
               ].map(([label, value]) => (
                 <div
                   key={label}

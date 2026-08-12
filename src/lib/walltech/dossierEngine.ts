@@ -4,14 +4,19 @@ export function calculateDossierMetrics(
   data: DossierData,
 ): DossierMetrics {
   const totalInvestment =
-    Math.max(0, data.acquisitionCost) + Math.max(0, data.operatingCosts);
+    data.acquisitionCost !== null && data.operatingCosts !== null
+      ? Math.max(0, data.acquisitionCost) + Math.max(0, data.operatingCosts)
+      : null;
 
-  const grossMargin = data.exitValue - totalInvestment;
+  const grossMargin =
+    totalInvestment !== null && data.exitValue !== null
+      ? data.exitValue - totalInvestment
+      : null;
 
   const roi =
-    totalInvestment > 0
+    totalInvestment !== null && totalInvestment > 0 && grossMargin !== null
       ? (grossMargin / totalInvestment) * 100
-      : 0;
+      : null;
 
   return {
     totalInvestment,
