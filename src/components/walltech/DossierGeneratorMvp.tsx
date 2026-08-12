@@ -147,7 +147,7 @@ export function DossierGeneratorMvp() {
                 Dossier operativo integrato
               </h1>
               <p className="mt-4 max-w-3xl text-sm leading-7 text-muted-foreground print:text-black">
-                Executive summary, business case, stato documentale e decisione
+                Sintesi esecutiva, analisi economica, stato documentale e decisione
                 operativa dell'opportunità.
               </p>
             </div>
@@ -206,7 +206,7 @@ export function DossierGeneratorMvp() {
               </div>
               <div>
                 <p className="text-xs text-muted-foreground print:text-black">
-                  Asset
+                  Immobile
                 </p>
                 <p className="mt-1 font-semibold">{data.assetType}</p>
               </div>
@@ -222,8 +222,8 @@ export function DossierGeneratorMvp() {
 
             <div className="mt-8 border-t border-border pt-6">
               <p className="text-sm leading-7 text-muted-foreground print:text-black">
-                Il dossier aggrega dati preliminari, output dell'Assessment e
-                output del Decision Engine per supportare la qualificazione
+                Il dossier aggrega dati preliminari, output della Valutazione e
+                output del Motore Decisionale per supportare la qualificazione
                 operativa dell'opportunità.
               </p>
             </div>
@@ -288,7 +288,7 @@ export function DossierGeneratorMvp() {
 
             <div className="mt-6 grid gap-4 sm:grid-cols-3">
               {[
-                ["Condition", data.condition],
+                ["Condizione", data.condition],
                 ["Priorità", data.priority === "CRITICAL" ? "CRITICA" : data.priority === "REVIEW" ? "DA RIVEDERE" : data.priority],
                 ["Scadenza", data.deadline],
               ].map(([label, value]) => (
