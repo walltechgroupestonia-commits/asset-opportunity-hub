@@ -1,2 +1,0 @@
-import {createWorkflowState} from "@/lib/walltech/workflowOrchestrator";
-export function WorkflowStatusCard(){const s=createWorkflowState("WT-DEMO-001","Walltech");return(<section className="border border-border p-5"><p className="text-xs text-primary">WORKFLOW ORCHESTRATOR</p><h3 className="text-xl font-bold">Workflow State</h3><p>Stage: {s.currentStage}</p><p>Next action: {s.nextAction}</p></section>);}

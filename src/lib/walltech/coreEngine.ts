@@ -17,7 +17,8 @@ function deriveOutcome(readiness: DecisionReadiness): DecisionOutcome {
 }
 
 function deriveNextAction(input: OpportunityInput, blockingMessages: string[]): string {
-  if (blockingMessages.length > 0) return blockingMessages[0];
+  const firstBlockingMessage = blockingMessages[0];
+  if (firstBlockingMessage) return firstBlockingMessage;
   if (input.operations.nextActionDefined && input.operations.nextAction) return input.operations.nextAction;
   return "Aprire il dossier operativo e assegnare la prossima azione.";
 }
