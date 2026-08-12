@@ -158,7 +158,7 @@ export function DossierGeneratorMvp() {
               </p>
               <p className="mt-2 text-xl font-bold">{data.operationCode}</p>
               <p className="mt-4 text-sm text-muted-foreground print:text-black">
-                Owner
+                Responsabile
               </p>
               <p className="mt-1 font-semibold">{data.owner}</p>
             </aside>
@@ -166,9 +166,9 @@ export function DossierGeneratorMvp() {
 
           <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {[
-              ["Opportunity Score", `${data.opportunityScore}/100`],
-              ["Risk Score", `${data.riskScore}/100`],
-              ["Readiness", data.readiness],
+              ["Punteggio Opportunità", `${data.opportunityScore}/100`],
+              ["Punteggio Rischio", `${data.riskScore}/100`],
+              ["Stato Decisionale", data.readiness === "DISCARD" ? "NON PROCEDERE" : data.readiness === "REVIEW" ? "DA RIVEDERE" : data.readiness === "DEEP_DIVE" ? "APPROFONDIRE" : data.readiness === "INVESTMENT_READY" ? "PRONTA PER DECISIONE" : data.readiness],
               ["Completezza dossier", `${completion}%`],
             ].map(([label, value]) => (
               <div
@@ -188,7 +188,7 @@ export function DossierGeneratorMvp() {
           <article className="border border-border bg-card/25 p-6 print:bg-white print:text-black">
             <div className="flex items-center gap-3">
               <FileText className="h-5 w-5 text-primary print:text-black" />
-              <h2 className="text-2xl font-bold">Executive Summary</h2>
+              <h2 className="text-2xl font-bold">Sintesi Esecutiva</h2>
             </div>
 
             <div className="mt-6 grid gap-5 sm:grid-cols-2">
@@ -232,7 +232,7 @@ export function DossierGeneratorMvp() {
           <article className="border border-border bg-card/25 p-6 print:bg-white print:text-black">
             <div className="flex items-center gap-3">
               <Gauge className="h-5 w-5 text-primary print:text-black" />
-              <h2 className="text-2xl font-bold">Business Case</h2>
+              <h2 className="text-2xl font-bold">Analisi Economica</h2>
             </div>
 
             <div className="mt-6 space-y-4">
@@ -240,7 +240,7 @@ export function DossierGeneratorMvp() {
                 ["Acquisizione", euro(data.acquisitionCost)],
                 ["Costi operativi", euro(data.operatingCosts)],
                 ["Investimento totale", euro(metrics.totalInvestment)],
-                ["Exit value", euro(data.exitValue)],
+                ["Valore di uscita", euro(data.exitValue)],
                 ["Margine lordo", euro(metrics.grossMargin)],
                 ["ROI indicativo", metrics.roi === null ? "DATO MANCANTE" : `${metrics.roi.toFixed(1)}%`],
               ].map(([label, value]) => (
@@ -261,7 +261,7 @@ export function DossierGeneratorMvp() {
         <section className="mt-8 border border-border bg-card/25 p-6 print:bg-white print:text-black">
           <div className="flex items-center gap-3">
             <FileCheck2 className="h-5 w-5 text-primary print:text-black" />
-            <h2 className="text-2xl font-bold">Document Status</h2>
+            <h2 className="text-2xl font-bold">Stato Documentale</h2>
           </div>
 
           <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
@@ -272,7 +272,7 @@ export function DossierGeneratorMvp() {
               >
                 <p className="font-semibold">{document.label}</p>
                 <p className="mt-2 text-xs text-muted-foreground print:text-black">
-                  {document.status}
+                  {document.status === "AVAILABLE" ? "DISPONIBILE" : document.status === "PARTIAL" ? "PARZIALE" : "MANCANTE"}
                 </p>
               </div>
             ))}
@@ -283,14 +283,14 @@ export function DossierGeneratorMvp() {
           <article className="border border-border bg-card/25 p-6 print:bg-white print:text-black">
             <div className="flex items-center gap-3">
               <ShieldCheck className="h-5 w-5 text-primary print:text-black" />
-              <h2 className="text-2xl font-bold">Decision Output</h2>
+              <h2 className="text-2xl font-bold">Esito Decisionale</h2>
             </div>
 
             <div className="mt-6 grid gap-4 sm:grid-cols-3">
               {[
                 ["Condition", data.condition],
-                ["Priority", data.priority],
-                ["Deadline", data.deadline],
+                ["Priorità", data.priority === "CRITICAL" ? "CRITICA" : data.priority === "REVIEW" ? "DA RIVEDERE" : data.priority],
+                ["Scadenza", data.deadline],
               ].map(([label, value]) => (
                 <div
                   key={label}
@@ -305,7 +305,7 @@ export function DossierGeneratorMvp() {
             </div>
 
             <div className="mt-6 border border-primary/30 bg-primary/[0.04] p-4 print:border-black print:bg-white">
-              <p className="font-semibold">Next Action</p>
+              <p className="font-semibold">Prossima Azione</p>
               <p className="mt-2 text-sm leading-6 text-muted-foreground print:text-black">
                 {data.nextAction}
               </p>
@@ -313,7 +313,7 @@ export function DossierGeneratorMvp() {
           </article>
 
           <article className="border border-border bg-card/25 p-6 print:bg-white print:text-black">
-            <h2 className="text-2xl font-bold">Evidence richiesta</h2>
+            <h2 className="text-2xl font-bold">Documentazione richiesta</h2>
             <p className="mt-5 text-sm leading-7 text-muted-foreground print:text-black">
               {data.evidenceRequired}
             </p>
