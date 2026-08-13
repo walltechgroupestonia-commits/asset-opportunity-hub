@@ -65,7 +65,7 @@ export function CorporateHero({
           </p>
 
           <h1 className="mt-5 max-w-5xl text-4xl font-bold leading-[1.08] text-foreground md:text-6xl">
-            Un ecosistema europeo per
+            Un ecosistema europeo di
             <span className="block text-primary">
               opportunità, advisory e operazioni complesse.
             </span>
