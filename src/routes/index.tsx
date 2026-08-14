@@ -10,12 +10,10 @@ import {
   type SearchFilters,
 } from "@/components/walltech/WalltechSearchEngine";
 import { LiveSourceValidation } from "@/components/walltech/LiveSourceValidation";
-import { ChannelGrid } from "@/components/walltech/ChannelGrid";
 import { ProcessTimeline } from "@/components/walltech/ProcessTimeline";
 import { OperationsExplorer } from "@/components/walltech/OperationsExplorer";
 import { PlatformFooterMap } from "@/components/walltech/PlatformFooterMap";
 import { SiteFooter } from "@/components/walltech/SiteFooter";
-import { DebtorDialog, PartnerDialog } from "@/components/walltech/dialogs";
 
 const TITLE = "WALLTECH GROUP OÜ — European Business Ecosystem";
 const DESCRIPTION =
@@ -37,8 +35,6 @@ function Index() {
   const navigate = useNavigate();
   const openDossier = () => void navigate({ to: "/dossier" });
 
-  const [debtor, setDebtor] = useState(false);
-  const [partner, setPartner] = useState(false);
   const [searchFilters, setSearchFilters] = useState<SearchFilters>({
     area: "",
     assetType: "all",
@@ -72,14 +68,6 @@ function Index() {
 
         <LiveSourceValidation filters={searchFilters} />
 
-        <ChannelGrid
-          onAction={(action) => {
-            if (action === "operations") scrollToOperations();
-            if (action === "debtor") setDebtor(true);
-            if (action === "partner") setPartner(true);
-          }}
-        />
-
         <ProcessTimeline />
         <OperationsExplorer onDossier={openDossier} />
       </main>
@@ -87,8 +75,6 @@ function Index() {
       <PlatformFooterMap />
       <SiteFooter />
 
-      <DebtorDialog open={debtor} onOpenChange={setDebtor} />
-      <PartnerDialog open={partner} onOpenChange={setPartner} />
     </div>
   );
 }

@@ -1,12 +1,12 @@
 const items = [
-  "Banche & Istituti di Credito",
-  "Intermediari Finanziari Art. 106 TUB",
-  "Società di Cartolarizzazione L. 130",
-  "Servicer NPL & UTP",
-  "Family Office & Club Deal",
-  "Studi Legali & Commercialisti",
-  "Fondi Immobiliari Opportunistici",
-  "Recupero Crediti Art. 115 TULPS",
+  "Fonti & Provenienza",
+  "Documenti & Evidence",
+  "Fatti Verificati",
+  "Dati Dichiarati",
+  "Assunzioni Esplicite",
+  "Missing Data",
+  "Contraddizioni",
+  "Risk & Decision Gate",
 ];
 
 export function TrustBar() {
