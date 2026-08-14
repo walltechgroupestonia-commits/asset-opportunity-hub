@@ -386,8 +386,15 @@ function DecisionContent({
               </div>
 
               <a
+                href="/dossier"
+                className="mt-6 inline-flex w-full items-center justify-center bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground"
+              >
+                Apri Decision Dossier
+              </a>
+
+              <a
                 href="/assessment"
-                className="mt-6 inline-flex w-full items-center justify-center border border-border px-5 py-3 text-sm font-semibold transition-colors hover:border-primary/50"
+                className="mt-3 inline-flex w-full items-center justify-center border border-border px-5 py-3 text-sm font-semibold transition-colors hover:border-primary/50"
               >
                 Aggiorna Assessment
               </a>
