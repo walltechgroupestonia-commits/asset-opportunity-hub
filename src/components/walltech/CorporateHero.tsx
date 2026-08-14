@@ -61,7 +61,7 @@ export function CorporateHero({
       <div className="container relative mx-auto grid gap-10 px-4 py-16 lg:grid-cols-[1.2fr_0.8fr] lg:items-center lg:py-20">
         <div>
           <p className="text-xs font-semibold tracking-[0.24em] text-primary">
-            WALLTECH GROUP OÜ · ESTONIA · EUROPA
+            WALLTECH INTELLIGENCE ENGINE™
           </p>
 
           <h1 className="mt-5 max-w-5xl text-4xl font-bold leading-[1.08] text-foreground md:text-6xl">
