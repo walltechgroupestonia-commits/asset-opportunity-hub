@@ -1,18 +1,14 @@
 import {
-  BriefcaseBusiness,
   FileText,
   Gauge,
   House,
   Network,
-  Search,
 } from "lucide-react";
 
 const items = [
   { label: "Home", href: "/", icon: House },
   { label: "Assessment", href: "/assessment", icon: Gauge },
-  { label: "Operazioni", href: "/#operazioni", icon: Search },
-  { label: "Investor Area", href: "/investor", icon: BriefcaseBusiness },
-  { label: "CRM Intelligence", href: "/crm", icon: Network },
+  { label: "Decision Engine", href: "/decision", icon: Network },
   { label: "Dossier", href: "/dossier", icon: FileText },
 ];
 

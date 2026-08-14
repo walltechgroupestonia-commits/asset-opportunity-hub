@@ -1,6 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { SiteHeader } from "@/components/walltech/SiteHeader";
 import { PlatformNavigation } from "@/components/walltech/PlatformNavigation";
 import { CorporateHero } from "@/components/walltech/CorporateHero";
 import { TrustBar } from "@/components/walltech/TrustBar";
@@ -57,7 +56,6 @@ function Index() {
 
   return (
     <div className="min-h-screen bg-background">
-      <SiteHeader onDossier={openDossier} />
       <PlatformNavigation />
 
       <main>

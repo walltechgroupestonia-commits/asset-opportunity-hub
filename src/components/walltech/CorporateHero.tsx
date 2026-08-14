@@ -14,28 +14,28 @@ interface CorporateHeroProps {
 }
 
 const focusAreas = [
-  { label: "Fiscal Assets e Crediti Fiscali", icon: Landmark },
-  { label: "NPL e Situazioni Speciali", icon: ShieldCheck },
-  { label: "Opportunità Immobiliari", icon: Building2 },
-  { label: "Estonia, Baltico e Nord Europa", icon: Globe2 },
+  { label: "Fonti ed Evidence", icon: Landmark },
+  { label: "Document Intelligence", icon: ShieldCheck },
+  { label: "Risk & Scenari", icon: Building2 },
+  { label: "Decision Dossier", icon: Globe2 },
 ];
 
 const ecosystemLines = [
   {
-    title: "Fiscal Assets e Crediti Fiscali",
-    note: "Origination, qualificazione e coordinamento delle opportunità",
+    title: "Source & Provenance",
+    note: "Identifica origine, affidabilità e stato di ogni dato",
   },
   {
-    title: "NPL e Asset Distressed",
-    note: "Operazioni qualificate, dossier e percorsi strutturati",
+    title: "Document Intelligence",
+    note: "Estrae le informazioni e segnala ciò che manca",
   },
   {
-    title: "Advisory Aziendale",
-    note: "Sviluppo del business, partnership e strutturazione operativa",
+    title: "Cross-Check & Risk",
+    note: "Confronta evidence, contraddizioni, rischi e blocchi",
   },
   {
-    title: "Estonia Gateway",
-    note: "Espansione europea, accesso al mercato e sviluppo internazionale",
+    title: "Decision Gate",
+    note: "Trasforma l'analisi in una decisione motivata e in una next action",
   },
 ];
 
@@ -65,22 +65,22 @@ export function CorporateHero({
           </p>
 
           <h1 className="mt-5 max-w-5xl text-4xl font-bold leading-[1.08] text-foreground md:text-6xl">
-            Un ecosistema europeo di
+            Da documenti e dati a
             <span className="block text-primary">
-              opportunità, advisory e operazioni complesse.
+              una decisione immobiliare verificabile.
             </span>
           </h1>
 
           <p className="mt-6 max-w-3xl text-base leading-8 text-muted-foreground md:text-lg">
-            Walltech Group OÜ individua, qualifica e coordina opportunità,
-            investitori, imprese e competenze professionali tra Italia,
-            Estonia, area Baltica, Nord Europa e mercato europeo.
+            Walltech Intelligence Engine™ trasforma una reale opportunità
+            immobiliare in un processo decisionale strutturato: fonti,
+            documenti, evidence, rischi, scenari e verifiche necessarie.
           </p>
 
           <p className="mt-4 max-w-3xl text-sm leading-7 text-muted-foreground md:text-base">
-            Fiscal Assets, NPL, Real Estate, sviluppo aziendale e accesso ai
-            mercati europei sono integrati in un unico ecosistema operativo,
-            rafforzato dal Walltech Intelligence Engine™.
+            Non inventa i dati mancanti e non sostituisce le fonti:
+            distingue ciò che è verificato, dichiarato, derivato, assunto,
+            mancante o contraddittorio prima di produrre una decisione.
           </p>
 
           <div className="mt-8 flex flex-wrap gap-3">
@@ -88,7 +88,7 @@ export function CorporateHero({
               href="/assessment"
               className="inline-flex items-center justify-center gap-2 bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
             >
-              Accedi ai servizi
+              Avvia Assessment
               <ArrowRight className="h-4 w-4" />
             </a>
 
@@ -96,7 +96,7 @@ export function CorporateHero({
               href="#walltech-engine"
               className="inline-flex items-center justify-center gap-2 border border-primary/50 bg-background/60 px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:border-primary hover:text-primary"
             >
-              Scopri il Walltech Intelligence Engine™
+              Come funziona l'Engine
             </a>
 
             <button
@@ -104,7 +104,7 @@ export function CorporateHero({
               onClick={onOperations}
               className="inline-flex items-center justify-center border border-border bg-background/50 px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:border-primary/50 hover:text-primary"
             >
-              Esplora le opportunità
+              Analizza un'opportunità
             </button>
           </div>
 
@@ -127,16 +127,16 @@ export function CorporateHero({
           <div className="flex items-start justify-between gap-4 border-b border-border pb-5">
             <div>
               <p className="text-[11px] font-semibold tracking-[0.22em] text-primary">
-                ECOSISTEMA WALLTECH
+                DECISION OPERATING SYSTEM
               </p>
 
               <h2 className="mt-3 text-2xl font-bold text-foreground">
-                Un gruppo. Più linee di opportunità.
+                Dall'opportunità al Decision Dossier.
               </h2>
 
               <p className="mt-3 text-sm leading-6 text-muted-foreground">
-                Servizi e opportunità distinti, coordinati da un'unica visione
-                europea e da un metodo operativo comune.
+                Un unico flusso operativo trasforma dati eterogenei in una
+                decisione documentata, verificabile e utilizzabile.
               </p>
             </div>
 
@@ -159,14 +159,14 @@ export function CorporateHero({
 
           <div className="mt-5 border border-primary/35 bg-primary/[0.05] p-4">
             <p className="text-[10px] font-semibold tracking-[0.18em] text-primary">
-              TECNOLOGIA PROPRIETARIA
+              PRINCIPIO OPERATIVO
             </p>
             <p className="mt-2 text-sm font-semibold text-foreground">
               Walltech Intelligence Engine™
             </p>
             <p className="mt-2 text-xs leading-6 text-muted-foreground">
-              Assessment, qualificazione, decisioni, dossier, workflow e
-              intelligence operativa all'interno dell'ecosistema Walltech.
+              Ogni output mantiene separati fatti verificati, dati dichiarati,
+              assunzioni, missing data e contraddizioni.
             </p>
           </div>
 
@@ -175,7 +175,7 @@ export function CorporateHero({
             onClick={onDossier}
             className="mt-5 w-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
           >
-            Apri il Dossier Integrato
+            Apri il Decision Dossier
           </button>
         </aside>
       </div>
