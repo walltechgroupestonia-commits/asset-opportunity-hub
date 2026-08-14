@@ -11,7 +11,6 @@ import {
 } from "@/components/walltech/WalltechSearchEngine";
 import { LiveSourceValidation } from "@/components/walltech/LiveSourceValidation";
 import { ProcessTimeline } from "@/components/walltech/ProcessTimeline";
-import { PlatformFooterMap } from "@/components/walltech/PlatformFooterMap";
 import { SiteFooter } from "@/components/walltech/SiteFooter";
 
 const TITLE = "WALLTECH GROUP OÜ — European Business Ecosystem";
@@ -67,7 +66,6 @@ function Index() {
         <ProcessTimeline />
       </main>
 
-      <PlatformFooterMap />
       <SiteFooter />
 
     </div>
