@@ -11,7 +11,6 @@ import {
 } from "@/components/walltech/WalltechSearchEngine";
 import { LiveSourceValidation } from "@/components/walltech/LiveSourceValidation";
 import { ProcessTimeline } from "@/components/walltech/ProcessTimeline";
-import { OperationsExplorer } from "@/components/walltech/OperationsExplorer";
 import { PlatformFooterMap } from "@/components/walltech/PlatformFooterMap";
 import { SiteFooter } from "@/components/walltech/SiteFooter";
 
@@ -43,10 +42,7 @@ function Index() {
     procedure: "all",
   });
 
-  const scrollToOperations = () =>
-    document.getElementById("operazioni")?.scrollIntoView({
-      behavior: "smooth",
-    });
+  const openAssessment = () => void navigate({ to: "/assessment" });
 
   return (
     <div className="min-h-screen bg-background">
@@ -55,7 +51,7 @@ function Index() {
       <main>
         <CorporateHero
           onDossier={openDossier}
-          onOperations={scrollToOperations}
+          onOperations={openAssessment}
         />
         <TrustBar />
         <ChooseYourPath />
@@ -69,7 +65,6 @@ function Index() {
         <LiveSourceValidation filters={searchFilters} />
 
         <ProcessTimeline />
-        <OperationsExplorer onDossier={openDossier} />
       </main>
 
       <PlatformFooterMap />
