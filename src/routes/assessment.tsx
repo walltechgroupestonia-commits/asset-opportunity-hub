@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ServiceQualificationRouter } from "@/components/walltech/ServiceQualificationRouter";
+import { PropertyAssessmentMvp } from "@/components/walltech/PropertyAssessmentMvp";
 
-const TITLE = "Walltech Service Qualification";
+const TITLE = "Walltech Opportunity Assessment";
 const DESCRIPTION =
-  "Percorso di qualificazione iniziale per indirizzare utenti, imprese, investitori e professionisti verso il servizio corretto.";
+  "Assessment strutturato dell'opportunità immobiliare: dati dichiarati, provenance, documentazione disponibile e missing data prima del Decision Gate.";
 
 export const Route = createFileRoute("/assessment")({
   head: () => ({
@@ -14,5 +14,5 @@ export const Route = createFileRoute("/assessment")({
       { property: "og:description", content: DESCRIPTION },
     ],
   }),
-  component: ServiceQualificationRouter,
+  component: PropertyAssessmentMvp,
 });

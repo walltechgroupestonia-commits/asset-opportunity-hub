@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { DecisionEngineMvp } from "@/components/walltech/DecisionEngineMvp";
+import { PropertyDecisionEngine } from "@/components/walltech/PropertyDecisionEngine";
 
-const TITLE = "Walltech Decision Engine";
+const TITLE = "Walltech Property Decision Engine";
 const DESCRIPTION =
-  "Decision Engine operativo per condition, readiness, priority, next action, owner, deadline ed evidence.";
+  "Decision Engine immobiliare basato su Opportunity Record, evidence, missing data, rischi, scenari economici e Decision Gate.";
 
 export const Route = createFileRoute("/decision")({
   head: () => ({
@@ -14,5 +14,5 @@ export const Route = createFileRoute("/decision")({
       { property: "og:description", content: DESCRIPTION },
     ],
   }),
-  component: DecisionEngineMvp,
+  component: PropertyDecisionEngine,
 });
