@@ -9,67 +9,84 @@ import {
 
 const modules = [
   {
-    title: "Assessment",
-    description: "Raccolta strutturata dei dati e qualificazione iniziale.",
+    title: "Opportunity Intake",
+    description:
+      "Raccoglie l'opportunità, i dati iniziali e gli elementi necessari per avviare l'analisi.",
     icon: Gauge,
     href: "/assessment",
   },
   {
-    title: "Decision Engine",
-    description: "Score, rischio, prossima azione, owner, deadline ed evidence.",
-    icon: BrainCircuit,
+    title: "Source & Provenance",
+    description:
+      "Registra origine, affidabilità e stato delle informazioni utilizzate nel processo.",
+    icon: Network,
     href: "/assessment",
   },
   {
-    title: "Dossier",
-    description: "Executive summary, documenti, business case e workflow.",
+    title: "Document Intelligence",
+    description:
+      "Organizza i documenti, estrae evidence e segnala dati mancanti o contraddittori.",
+    icon: FolderLock,
+    href: "/assessment",
+  },
+  {
+    title: "Risk & Scenari",
+    description:
+      "Valuta rischi, assunzioni e scenari economici senza inventare i dati mancanti.",
+    icon: BarChart3,
+    href: "/decision",
+  },
+  {
+    title: "Decision Gate",
+    description:
+      "Converte l'analisi in una decisione motivata, verifiche richieste e prossima azione.",
+    icon: BrainCircuit,
+    href: "/decision",
+  },
+  {
+    title: "Decision Dossier",
+    description:
+      "Consolida fonti, evidence, rischi, scenari e decisione in un output utilizzabile.",
     icon: FileCheck2,
     href: "/dossier",
-  },
-  {
-    title: "Investor Area",
-    description: "Operazioni qualificate, KPI, dossier e accesso controllato.",
-    icon: BarChart3,
-    href: "/investor",
-  },
-  {
-    title: "Data Room",
-    description: "Documenti, versioni, permessi, NDA e completezza.",
-    icon: FolderLock,
-    href: "/dossier",
-  },
-  {
-    title: "CRM Intelligence",
-    description: "Lead, opportunità, owner, next action, evidence e closing.",
-    icon: Network,
-    href: "/crm",
   },
 ];
 
 export function IntelligenceEngineShowcase() {
   return (
-    <section id="walltech-engine" className="bg-background py-16">
-      <div className="container mx-auto px-4">
-        <div className="grid gap-10 xl:grid-cols-[0.8fr_1.2fr] xl:items-start">
+    <section
+      id="walltech-engine"
+      aria-labelledby="walltech-engine-title"
+      className="border-t border-border bg-background py-20"
+    >
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="grid gap-12 xl:grid-cols-[0.8fr_1.2fr]">
           <div>
             <p className="text-xs font-semibold tracking-[0.22em] text-primary">
               WALLTECH INTELLIGENCE ENGINE™
             </p>
-            <h2 className="mt-4 text-3xl font-bold text-foreground md:text-5xl">
-              Il super prodotto proprietario che rafforza tutto l'ecosistema.
+
+            <h2
+              id="walltech-engine-title"
+              className="mt-4 text-3xl font-bold text-foreground md:text-5xl"
+            >
+              Il sistema operativo per decisioni immobiliari verificabili.
             </h2>
-            <p className="mt-5 text-sm leading-7 text-muted-foreground md:text-base">
-              L'Engine non sostituisce Walltech: è figlio di Walltech e ne
-              amplifica metodo, affidabilità, capacità operativa e fiducia.
+
+            <p className="mt-5 max-w-2xl text-sm leading-7 text-muted-foreground md:text-base">
+              Un unico flusso collega opportunità, fonti, documenti, evidence,
+              rischio e decisione finale mantenendo separati fatti verificati,
+              dati dichiarati, assunzioni e missing data.
             </p>
 
             <div className="mt-8 border border-primary/40 bg-primary/[0.04] p-5">
               <p className="text-xs font-semibold tracking-[0.18em] text-primary">
-                ENGINE 001 · MILESTONE
+                ENGINE 001 · FUNCTIONAL CORE
               </p>
               <p className="mt-3 text-sm leading-7 text-muted-foreground">
-                Questa prima versione costituisce la base tecnologica per i futuri
-                Engine del gruppo.
+                Questa versione concentra il prodotto su un risultato:
+                trasformare una reale opportunità immobiliare in un Decision
+                Dossier documentato, verificabile e utilizzabile.
               </p>
             </div>
           </div>

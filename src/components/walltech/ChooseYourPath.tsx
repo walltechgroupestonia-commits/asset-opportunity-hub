@@ -1,10 +1,6 @@
 import {
   ArrowRight,
-  BriefcaseBusiness,
   Building2,
-  Coins,
-  Globe2,
-  Handshake,
   Scale,
 } from "lucide-react";
 
@@ -32,38 +28,6 @@ const paths: PathCard[] = [
     eyebrow: "SPECIAL SITUATION",
     href: "/assessment",
     icon: Scale,
-  },
-  {
-    title: "Ho crediti fiscali o asset tributari",
-    description:
-      "Presenta l'opportunità per una prima qualifica operativa, documentale e commerciale della filiera.",
-    eyebrow: "FISCAL ASSETS",
-    href: "/assessment",
-    icon: Coins,
-  },
-  {
-    title: "Voglio sviluppare l'impresa in Estonia",
-    description:
-      "Valuta un percorso verso Estonia, Baltico e Nord Europa per nuova società, business development e accesso al mercato.",
-    eyebrow: "ESTONIA GATEWAY",
-    href: "/#estonia",
-    icon: Globe2,
-  },
-  {
-    title: "Voglio investire in operazioni qualificate",
-    description:
-      "Accedi all'Investor Area, alle opportunità selezionate, ai dossier e ai percorsi di approfondimento autorizzati.",
-    eyebrow: "INVESTOR AREA",
-    href: "/investor",
-    icon: BriefcaseBusiness,
-  },
-  {
-    title: "Voglio collaborare con Walltech",
-    description:
-      "Presenta competenze, opportunità o una proposta di partnership da integrare nell'ecosistema Walltech.",
-    eyebrow: "PARTNERSHIP",
-    href: "/crm",
-    icon: Handshake,
   },
 ];
 

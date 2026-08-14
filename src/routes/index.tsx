@@ -3,10 +3,8 @@ import { useState } from "react";
 import { PlatformNavigation } from "@/components/walltech/PlatformNavigation";
 import { CorporateHero } from "@/components/walltech/CorporateHero";
 import { TrustBar } from "@/components/walltech/TrustBar";
-import { WalltechEcosystem } from "@/components/walltech/WalltechEcosystem";
 import { ChooseYourPath } from "@/components/walltech/ChooseYourPath";
 import { IntelligenceEngineShowcase } from "@/components/walltech/IntelligenceEngineShowcase";
-import { EstoniaGatewaySection } from "@/components/walltech/EstoniaGatewaySection";
 import {
   WalltechSearchEngine,
   type SearchFilters,
@@ -64,10 +62,8 @@ function Index() {
           onOperations={scrollToOperations}
         />
         <TrustBar />
-        <WalltechEcosystem />
         <ChooseYourPath />
         <IntelligenceEngineShowcase />
-        <EstoniaGatewaySection />
 
         <WalltechSearchEngine
           onDossier={openDossier}
