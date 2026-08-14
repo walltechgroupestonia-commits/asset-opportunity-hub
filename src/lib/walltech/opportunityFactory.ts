@@ -193,8 +193,12 @@ export function createPropertyOpportunity(
       expectedMonthlyRent: null,
       monthsToExit: null,
     },
-
-    availableDocuments,
-    missingDocuments,
+  availableDocuments,
+  missingDocuments,
+  documentEvidence: {
+    documents: [],
+    crossChecks: [],
+    globalWarnings: [],
+  },
   };
 }
