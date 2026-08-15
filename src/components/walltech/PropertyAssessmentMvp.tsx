@@ -22,6 +22,8 @@ import {
   type PropertyAssessmentDraft,
 } from "@/lib/walltech/opportunityFactory";
 import { savePropertyOpportunity } from "@/lib/walltech/opportunityStore";
+import { PropertyDocumentIntake } from "@/components/walltech/PropertyDocumentIntake";
+import type { PropertyDocumentEvidenceLayer } from "@/lib/walltech/propertyIntelligenceTypes";
 
 const DOCUMENTS = [
   "Avviso di vendita",
@@ -53,6 +55,8 @@ export function PropertyAssessmentMvp() {
   const navigate = useNavigate();
   const [draft, setDraft] =
     useState<PropertyAssessmentDraft>(INITIAL_DRAFT);
+  const [documentEvidence, setDocumentEvidence] =
+    useState<PropertyDocumentEvidenceLayer | null>(null);
 
   const update = (
     key: keyof PropertyAssessmentDraft,
@@ -76,10 +80,32 @@ export function PropertyAssessmentMvp() {
     }));
   };
 
+  const updateDocumentEvidence = (
+    evidence: PropertyDocumentEvidenceLayer,
+    detectedDocuments: string[],
+  ) => {
+    setDocumentEvidence(evidence);
+
+    setDraft((current) => ({
+      ...current,
+      availableDocuments: Array.from(
+        new Set([
+          ...current.availableDocuments,
+          ...detectedDocuments,
+        ]),
+      ),
+    }));
+  };
+
   const submit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const opportunity = createPropertyOpportunity(draft);
+
+    if (documentEvidence) {
+      opportunity.documentEvidence = documentEvidence;
+    }
+
     savePropertyOpportunity(opportunity);
 
     void navigate({ to: "/decision" });
@@ -443,6 +469,10 @@ export function PropertyAssessmentMvp() {
                     </label>
                   ))}
                 </div>
+
+                <PropertyDocumentIntake
+                  onChange={updateDocumentEvidence}
+                />
               </section>
             </div>
 
