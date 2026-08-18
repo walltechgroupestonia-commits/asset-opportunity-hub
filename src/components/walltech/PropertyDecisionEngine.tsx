@@ -9,6 +9,8 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { analyzePropertyOpportunity } from "@/lib/walltech/propertyIntelligenceEngine";
+import { evaluateOpportunity } from "@/lib/walltech/coreEngine";
+import { buildPropertyCoreInput } from "@/lib/walltech/propertyCoreAdapter";
 import type {
   PropertyIntelligenceOutput,
   PropertyOpportunityInput,
@@ -80,9 +82,11 @@ function Metric({
 function DecisionContent({
   opportunity,
   analysis,
+  coreDecision,
 }: {
   opportunity: PropertyOpportunityInput;
   analysis: PropertyIntelligenceOutput;
+  coreDecision: import("@/lib/walltech/coreTypes").EngineDecision;
 }) {
   const procedure = opportunity.procedure;
   const asset = opportunity.asset;
@@ -156,6 +160,222 @@ function DecisionContent({
               />
             </div>
           </section>
+
+          {(opportunity.procedureIntelligence ||
+            opportunity.creditorIntelligence ||
+            opportunity.strategyContext) ? (
+            <section className="border border-primary/30 bg-primary/[0.03] p-6">
+              <p className="text-[11px] font-semibold tracking-[0.22em] text-primary">
+                WALLTECH PROCEDURE & STRATEGY INTELLIGENCE
+              </p>
+
+              <div className="mt-6 grid gap-6 xl:grid-cols-3">
+                <article className="border border-border bg-background/70 p-5">
+                  <h2 className="font-bold">
+                    Procedure Intelligence
+                  </h2>
+
+                  {opportunity.procedureIntelligence ? (
+                    <div className="mt-4 space-y-3 text-sm">
+                      <p>
+                        Procedure:{" "}
+                        <strong>
+                          {opportunity.procedureIntelligence.procedures.length}
+                        </strong>
+                      </p>
+
+                      <p>
+                        Attori:{" "}
+                        <strong>
+                          {opportunity.procedureIntelligence.actors.length}
+                        </strong>
+                      </p>
+
+                      <p>
+                        Lotti:{" "}
+                        <strong>
+                          {opportunity.procedureIntelligence.lots.length}
+                        </strong>
+                      </p>
+
+                      <p>
+                        Asset:{" "}
+                        <strong>
+                          {opportunity.procedureIntelligence.assets.length}
+                        </strong>
+                      </p>
+
+                      <p>
+                        Current Sale Event:{" "}
+                        <strong>
+                          {opportunity.procedureIntelligence.currentSaleEventId ??
+                            "NON DETERMINATO"}
+                        </strong>
+                      </p>
+
+                      {opportunity.procedureIntelligence.currentSaleEventId ? (
+                        (() => {
+                          const currentEvent =
+                            opportunity.procedureIntelligence?.saleEvents.find(
+                              (event) =>
+                                event.saleEventId ===
+                                opportunity.procedureIntelligence
+                                  ?.currentSaleEventId,
+                            );
+
+                          return currentEvent ? (
+                            <div className="border-t border-border pt-3">
+                              <p>
+                                Stato:{" "}
+                                <strong>{currentEvent.status}</strong>
+                              </p>
+
+                              <p className="mt-2">
+                                Esperimento:{" "}
+                                <strong>
+                                  {currentEvent.experimentLabel?.value ??
+                                    "NON DETERMINATO"}
+                                </strong>
+                              </p>
+
+                              <p className="mt-2">
+                                Storico eventi:{" "}
+                                <strong>
+                                  {currentEvent.history?.length ?? 0}
+                                </strong>
+                              </p>
+                            </div>
+                          ) : null;
+                        })()
+                      ) : null}
+                    </div>
+                  ) : (
+                    <p className="mt-4 text-sm text-muted-foreground">
+                      Intelligence procedurale non disponibile.
+                    </p>
+                  )}
+                </article>
+
+                <article className="border border-border bg-background/70 p-5">
+                  <h2 className="font-bold">
+                    Creditor Intelligence
+                  </h2>
+
+                  {opportunity.creditorIntelligence ? (
+                    <div className="mt-4 space-y-3 text-sm">
+                      <p>
+                        Posizioni identificate:{" "}
+                        <strong>
+                          {opportunity.creditorIntelligence.positions.length}
+                        </strong>
+                      </p>
+
+                      <p>
+                        Identità pubblica limitata:{" "}
+                        <strong>
+                          {opportunity.creditorIntelligence
+                            .publicIdentityRestricted
+                            ? "SÌ"
+                            : "NO"}
+                        </strong>
+                      </p>
+
+                      <p>
+                        Evidence autorizzata richiesta:{" "}
+                        <strong>
+                          {opportunity.creditorIntelligence
+                            .requiresAuthorizedEvidence
+                            ? "SÌ"
+                            : "NO"}
+                        </strong>
+                      </p>
+
+                      {opportunity.creditorIntelligence.positions.map(
+                        (position) => (
+                          <div
+                            key={position.id}
+                            className="border-t border-border pt-3"
+                          >
+                            <p>
+                              {position.role}:{" "}
+                              <strong>
+                                {position.name?.value ??
+                                  "IDENTITÀ NON DISPONIBILE"}
+                              </strong>
+                            </p>
+
+                            {position.nplStatus ? (
+                              <p className="mt-2">
+                                NPL:{" "}
+                                <strong>
+                                  {position.nplStatus.value}
+                                </strong>
+                              </p>
+                            ) : null}
+                          </div>
+                        ),
+                      )}
+                    </div>
+                  ) : (
+                    <p className="mt-4 text-sm text-muted-foreground">
+                      Creditor Intelligence non disponibile.
+                    </p>
+                  )}
+                </article>
+
+                <article className="border border-border bg-background/70 p-5">
+                  <h2 className="font-bold">
+                    Strategy Intelligence
+                  </h2>
+
+                  {opportunity.strategyContext ? (
+                    <div className="mt-4 space-y-3 text-sm">
+                      <p>
+                        Strategia raccomandata:{" "}
+                        <strong className="text-primary">
+                          {
+                            opportunity.strategyContext
+                              .recommendedStrategy
+                          }
+                        </strong>
+                      </p>
+
+                      <p>
+                        Strategie candidate:{" "}
+                        <strong>
+                          {opportunity.strategyContext.candidateStrategies.join(
+                            ", ",
+                          )}
+                        </strong>
+                      </p>
+
+                      <p>
+                        Creditor Intelligence richiesta:{" "}
+                        <strong>
+                          {opportunity.strategyContext
+                            .requiresCreditorIntelligence
+                            ? "SÌ"
+                            : "NO"}
+                        </strong>
+                      </p>
+
+                      {opportunity.strategyContext.reason ? (
+                        <div className="border-t border-border pt-3">
+                          <p className="leading-6 text-muted-foreground">
+                            {opportunity.strategyContext.reason}
+                          </p>
+                        </div>
+                      ) : null}
+                    </div>
+                  ) : (
+                    <p className="mt-4 text-sm text-muted-foreground">
+                      Strategy Intelligence non disponibile.
+                    </p>
+                  )}
+                </article>
+              </div>
+            </section>
+          ) : null}
 
           <section className="grid gap-8 xl:grid-cols-2">
             <article className="border border-border bg-card/30 p-6">
@@ -337,6 +557,91 @@ function DecisionContent({
             </div>
           </section>
 
+          <section className="border border-primary/40 bg-primary/[0.03] p-6">
+            <div className="flex flex-wrap items-start justify-between gap-5">
+              <div>
+                <p className="text-[11px] font-semibold tracking-[0.22em] text-primary">
+                  WALLTECH CORE DECISION ENGINE
+                </p>
+                <h2 className="mt-3 text-2xl font-bold">
+                  Decisione operativa
+                </h2>
+              </div>
+
+              <div className="border border-primary/40 px-4 py-3">
+                <p className="text-xs text-muted-foreground">
+                  OUTCOME
+                </p>
+                <p className="mt-1 font-bold text-primary">
+                  {coreDecision.outcome}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+              <Metric label="Condition" value={coreDecision.condition} />
+              <Metric label="Readiness" value={coreDecision.readiness} />
+              <Metric label="Priority" value={coreDecision.priority} />
+              <Metric label="Score" value={`${coreDecision.score}/100`} />
+              <Metric label="Risk" value={`${coreDecision.risk}/100`} />
+            </div>
+
+            <div className="mt-6 grid gap-4 xl:grid-cols-3">
+              <article className="border border-border bg-background/70 p-4">
+                <p className="text-xs text-muted-foreground">
+                  NEXT ACTION
+                </p>
+                <p className="mt-2 text-sm font-semibold leading-6">
+                  {coreDecision.nextAction}
+                </p>
+              </article>
+
+              <article className="border border-border bg-background/70 p-4">
+                <p className="text-xs text-muted-foreground">
+                  OWNER
+                </p>
+                <p className="mt-2 text-sm font-semibold">
+                  {coreDecision.owner}
+                </p>
+              </article>
+
+              <article className="border border-border bg-background/70 p-4">
+                <p className="text-xs text-muted-foreground">
+                  DEADLINE
+                </p>
+                <p className="mt-2 text-sm font-semibold">
+                  {coreDecision.deadline}
+                </p>
+              </article>
+            </div>
+
+            {coreDecision.warnings.length ? (
+              <div className="mt-6 border border-border bg-background/70 p-4">
+                <p className="text-xs font-semibold tracking-[0.14em] text-primary">
+                  BLOCKS / WARNINGS
+                </p>
+                <ul className="mt-3 space-y-2 text-sm leading-6">
+                  {coreDecision.warnings.map((warning) => (
+                    <li key={warning.code}>
+                      <strong>{warning.code}</strong>: {warning.message}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
+
+            <div className="mt-6 border-t border-border pt-5">
+              <p className="text-xs font-semibold tracking-[0.14em] text-muted-foreground">
+                EVIDENCE REQUIRED
+              </p>
+              <ul className="mt-3 grid gap-2 text-sm leading-6 md:grid-cols-2">
+                {coreDecision.evidenceRequired.map((evidence) => (
+                  <li key={evidence}>• {evidence}</li>
+                ))}
+              </ul>
+            </div>
+          </section>
+
           <section className="grid gap-8 xl:grid-cols-[1fr_0.72fr]">
             <article className="border border-border bg-card/30 p-6">
               <div className="flex items-center gap-3">
@@ -424,6 +729,20 @@ export function PropertyDecisionEngine() {
     [opportunity],
   );
 
+  const coreDecision = useMemo(
+    () => {
+      if (!opportunity || !analysis) return null;
+
+      const coreInput = buildPropertyCoreInput(
+        opportunity,
+        analysis,
+      );
+
+      return evaluateOpportunity(coreInput);
+    },
+    [opportunity, analysis],
+  );
+
   return (
     <main className="min-h-screen bg-background text-foreground">
       <header className="border-b border-border bg-card/40">
@@ -453,10 +772,11 @@ export function PropertyDecisionEngine() {
             Caricamento Opportunity Record...
           </p>
         </section>
-      ) : opportunity && analysis ? (
+      ) : opportunity && analysis && coreDecision ? (
         <DecisionContent
           opportunity={opportunity}
           analysis={analysis}
+          coreDecision={coreDecision}
         />
       ) : (
         <section className="container mx-auto px-4 py-20">

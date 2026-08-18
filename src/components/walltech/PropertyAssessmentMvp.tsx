@@ -22,8 +22,13 @@ import {
   type PropertyAssessmentDraft,
 } from "@/lib/walltech/opportunityFactory";
 import { savePropertyOpportunity } from "@/lib/walltech/opportunityStore";
+import { applyDocumentEvidenceToOpportunity } from "@/lib/walltech/documentEvidenceBridge";
+import { buildProcedureIntelligenceContext } from "@/lib/walltech/procedureIntelligenceBridge";
+import { buildCreditorIntelligenceContext } from "@/lib/walltech/creditorIntelligenceBridge";
+import { buildPropertyStrategyContext } from "@/lib/walltech/propertyStrategyBridge";
 import { PropertyDocumentIntake } from "@/components/walltech/PropertyDocumentIntake";
 import type { PropertyDocumentEvidenceLayer } from "@/lib/walltech/propertyIntelligenceTypes";
+import type { PvpPublicAcquisitionMetadata } from "@/lib/adapters/pvpEvidenceAcquisition.server";
 
 const DOCUMENTS = [
   "Avviso di vendita",
@@ -58,6 +63,9 @@ export function PropertyAssessmentMvp() {
   const [documentEvidence, setDocumentEvidence] =
     useState<PropertyDocumentEvidenceLayer | null>(null);
 
+  const [pvpMetadata, setPvpMetadata] =
+    useState<PvpPublicAcquisitionMetadata | null>(null);
+
   const update = (
     key: keyof PropertyAssessmentDraft,
     value: string,
@@ -83,8 +91,13 @@ export function PropertyAssessmentMvp() {
   const updateDocumentEvidence = (
     evidence: PropertyDocumentEvidenceLayer,
     detectedDocuments: string[],
+    metadata?: PvpPublicAcquisitionMetadata,
   ) => {
     setDocumentEvidence(evidence);
+
+    if (metadata) {
+      setPvpMetadata(metadata);
+    }
 
     setDraft((current) => ({
       ...current,
@@ -106,7 +119,80 @@ export function PropertyAssessmentMvp() {
       opportunity.documentEvidence = documentEvidence;
     }
 
-    savePropertyOpportunity(opportunity);
+    const enrichedOpportunity =
+      applyDocumentEvidenceToOpportunity(opportunity);
+
+    const evidenceDocuments =
+      enrichedOpportunity.documentEvidence?.documents ?? [];
+
+    const saleNoticeEvidence =
+      evidenceDocuments.find(
+        (document) =>
+          document.parsedDocument?.kind ===
+          "SALE_NOTICE",
+      );
+
+    const ctuEvidence =
+      evidenceDocuments.find(
+        (document) =>
+          document.parsedDocument?.kind ===
+          "CTU",
+      );
+
+    const saleHistoryEvidence =
+      evidenceDocuments.find(
+        (document) =>
+          document.parsedDocument?.kind ===
+          "SALE_HISTORY_ORDER",
+      );
+
+    if (
+      pvpMetadata &&
+      saleNoticeEvidence?.parsedDocument
+    ) {
+      enrichedOpportunity.procedureIntelligence =
+        buildProcedureIntelligenceContext({
+          pvp: pvpMetadata,
+          saleNotice:
+            saleNoticeEvidence.parsedDocument,
+          saleNoticeDocumentId:
+            saleNoticeEvidence.id,
+          ...(ctuEvidence?.parsedDocument
+            ? {
+                ctu:
+                  ctuEvidence.parsedDocument,
+                ctuDocumentId:
+                  ctuEvidence.id,
+              }
+            : {}),
+          ...(saleHistoryEvidence?.parsedDocument
+            ? {
+                saleHistory:
+                  saleHistoryEvidence.parsedDocument,
+                saleHistoryDocumentId:
+                  saleHistoryEvidence.id,
+              }
+            : {}),
+        });
+    }
+
+    enrichedOpportunity.creditorIntelligence =
+      buildCreditorIntelligenceContext({
+        saleNotice:
+          saleNoticeEvidence?.parsedDocument,
+        ctu:
+          ctuEvidence?.parsedDocument,
+      });
+
+    enrichedOpportunity.strategyContext =
+      buildPropertyStrategyContext({
+        procedureIntelligence:
+          enrichedOpportunity.procedureIntelligence,
+        creditorIntelligence:
+          enrichedOpportunity.creditorIntelligence,
+      });
+
+    savePropertyOpportunity(enrichedOpportunity);
 
     void navigate({ to: "/decision" });
   };

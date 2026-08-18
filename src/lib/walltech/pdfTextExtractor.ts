@@ -1,11 +1,3 @@
-import {
-  GlobalWorkerOptions,
-  getDocument,
-} from "pdfjs-dist";
-import pdfWorkerUrl from "pdfjs-dist/build/pdf.worker.mjs?url";
-
-GlobalWorkerOptions.workerSrc = pdfWorkerUrl;
-
 export interface PdfTextPage {
   page: number;
   text: string;
@@ -26,6 +18,22 @@ const toHex = (buffer: ArrayBuffer) =>
 export async function extractPdfText(
   file: File,
 ): Promise<PdfTextExtractionResult> {
+  if (typeof window === "undefined") {
+    throw new Error(
+      "L'estrazione PDF browser può essere eseguita solo nel client.",
+    );
+  }
+
+  const [
+    { GlobalWorkerOptions, getDocument },
+    { default: pdfWorkerUrl },
+  ] = await Promise.all([
+    import("pdfjs-dist"),
+    import("pdfjs-dist/build/pdf.worker.mjs?url"),
+  ]);
+
+  GlobalWorkerOptions.workerSrc = pdfWorkerUrl;
+
   const isPdf =
     file.type === "application/pdf" ||
     file.name.toLowerCase().endsWith(".pdf");

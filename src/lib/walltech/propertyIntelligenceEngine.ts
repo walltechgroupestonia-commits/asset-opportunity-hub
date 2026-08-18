@@ -241,7 +241,11 @@ export function analyzePropertyOpportunity(
 
   if (
     blockingIssue ||
-    (riskScore !== null && riskScore >= 85)
+    (
+      riskScore !== null &&
+      riskScore >= 85 &&
+      riskCoverage >= 80
+    )
   ) {
     decision = "DISCARD";
     decisionReason =

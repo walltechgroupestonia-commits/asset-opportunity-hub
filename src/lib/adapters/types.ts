@@ -52,13 +52,36 @@ export interface PartnerFeedCredentials {
 
 export interface NormalizedListing {
   id: string;
-  title: string;
-  area: string;
-  assetType: string;
-  basePrice: number;
-  occupancy: string;
-  procedure: string;
+  sourceId: string;
+  sourceLabel: string;
+  sourceListingId: string;
   sourceUrl: string;
+
+  title?: string;
+
+  country?: string;
+  region?: string;
+  province?: string;
+  city?: string;
+  postalCode?: string;
+
+  assetType?: string;
+  surfaceSqm?: number;
+
+  basePrice?: number;
+  minimumOffer?: number;
+
+  occupancy?: string;
+
+  procedure?: string;
+  procedureNumber?: string;
+  court?: string;
+
+  auctionDate?: string;
+
+  sourceClass: "OFFICIAL" | "PROCEDURAL_DOCUMENT" | "MARKET" | "USER_INPUT" | "ENGINE_INFERENCE";
+  evidenceAccessLevel: "PUBLIC" | "AUTHORIZED" | "USER_PROVIDED";
+  confidence: "CONFIRMED" | "REPORTED" | "ESTIMATED" | "MISSING";
 }
 
 /**
@@ -74,3 +97,79 @@ export interface PartnerFeedAdapter {
   disconnect(): void;
 }
 
+
+export type AuthorizedEvidenceSource =
+  | "PST"
+  | "SISTER"
+  | "PARTNER_API"
+  | "USER_PROVIDED"
+  | "OTHER";
+
+export interface AuthorizedEvidenceQuery {
+  procedureNumber?: string;
+  court?: string;
+  taxCode?: string;
+  vatNumber?: string;
+  cadastralSheet?: string;
+  cadastralParcel?: string;
+  cadastralSub?: string;
+  creditorName?: string;
+}
+
+export interface AuthorizedCreditorEvidence {
+  evidenceId: string;
+  source: AuthorizedEvidenceSource;
+  sourceLabel: string;
+  acquiredAt: string;
+
+  creditorName?: string;
+  currentClaimHolder?: string;
+  servicerName?: string;
+
+  entityCategory?:
+    | "BANK"
+    | "SPV"
+    | "SERVICER"
+    | "CONDOMINIUM"
+    | "TAX_PUBLIC_CREDITOR"
+    | "COMPANY"
+    | "PRIVATE_INDIVIDUAL"
+    | "OTHER"
+    | "UNKNOWN";
+
+  creditorRole?:
+    | "PROCEEDING_CREDITOR"
+    | "INTERVENING_CREDITOR"
+    | "SECURED_CREDITOR"
+    | "CURRENT_CLAIM_HOLDER"
+    | "SERVICER"
+    | "NEGOTIATION_COUNTERPARTY"
+    | "OTHER";
+
+  amount?: number;
+  securedRank?: string;
+
+  nplStatus?:
+    | "CONFIRMED_NPL"
+    | "POSSIBLE_NPL"
+    | "NOT_NPL"
+    | "UNKNOWN";
+
+  sourceDocumentId?: string;
+  note?: string;
+}
+
+export interface AuthorizedEvidenceAdapter {
+  id: string;
+  name: string;
+
+  connect(
+    credentials: PartnerFeedCredentials,
+  ): Promise<ConnectionTestResult>;
+
+  fetchCreditorEvidence(
+    query: AuthorizedEvidenceQuery,
+  ): Promise<AuthorizedCreditorEvidence[]>;
+
+  disconnect(): void;
+}
