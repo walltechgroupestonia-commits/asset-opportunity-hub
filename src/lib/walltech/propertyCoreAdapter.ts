@@ -12,10 +12,9 @@ export function buildPropertyCoreInput(
     analysis.requiredNextChecks[0] ??
     "Completare l'Assessment e verificare l'evidence disponibile.";
 
-  const deadline =
-    opportunity.procedure.offerDeadline?.value
-      ? `Entro ${opportunity.procedure.offerDeadline.value}`
-      : "Entro 48 ore";
+  const deadline = opportunity.procedure.offerDeadline?.value
+    ? `Entro ${opportunity.procedure.offerDeadline.value}`
+    : "Entro 48 ore";
 
   const evidenceRequired = [
     ...opportunity.availableDocuments,
@@ -34,9 +33,7 @@ export function buildPropertyCoreInput(
   const feeProtected = false;
 
   const blockingComplianceIssue = opportunity.issues.some(
-    (issue) =>
-      issue.blocking ||
-      issue.area === "TAX",
+    (issue) => issue.blocking || issue.area === "TAX",
   );
 
   return {
@@ -70,9 +67,10 @@ export function buildPropertyCoreInput(
       required: Array.from(new Set(evidenceRequired)),
       available: opportunity.availableDocuments,
       missing: opportunity.missingDocuments,
-      verified: opportunity.documentEvidence?.documents
-        .filter((document) => document.status === "ANALYZED")
-        .map((document) => document.fileName) ?? [],
+      verified:
+        opportunity.documentEvidence?.documents
+          .filter((document) => document.status === "ANALYZED")
+          .map((document) => document.fileName) ?? [],
     },
 
     operations: {
@@ -82,8 +80,7 @@ export function buildPropertyCoreInput(
       nextAction,
       deadlineDefined: Boolean(deadline),
       deadline,
-      urgencyHigh:
-        opportunity.procedure.auctionDate?.value !== null,
+      urgencyHigh: Boolean(opportunity.procedure.auctionDate?.value),
     },
 
     compliance: {

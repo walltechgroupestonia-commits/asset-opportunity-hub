@@ -35,28 +35,67 @@ export function buildWarnings(input: OpportunityInput): EngineWarning[] {
   const add = (code: string, severity: Priority, message: string, blocking: boolean) =>
     warnings.push({ code, severity, message, blocking });
 
+  const isPropertyDecision = input.module === "property";
+
   if (!input.counterparties.sourceAvailable)
     add("SOURCE_MISSING", "CRITICAL", "Sorgente dell'opportunità non verificata.", true);
-  if (!input.counterparties.sellerOrOriginatorAvailable)
-    add("ORIGINATOR_MISSING", "HIGH", "Cedente, venditore o originator non disponibile.", true);
-  if (!input.counterparties.buyerOrRecipientAvailable)
-    add("BUYER_MISSING", "HIGH", "Buyer, cessionario o controparte finale non disponibile.", true);
 
-  if (!input.fee.defined) add("FEE_UNDEFINED", "CRITICAL", "Fee Walltech non definita.", true);
-  if (!input.fee.payerIdentified) add("FEE_PAYER_UNKNOWN", "HIGH", "Soggetto pagatore non identificato.", true);
-  if (!input.fee.maturityDefined) add("FEE_MATURITY_UNKNOWN", "HIGH", "Momento di maturazione della fee non definito.", true);
-  if (!input.fee.protectedByAgreement) add("FEE_UNPROTECTED", "CRITICAL", "Fee non protetta da accordo.", true);
+  if (!isPropertyDecision) {
+    if (!input.counterparties.sellerOrOriginatorAvailable)
+      add("ORIGINATOR_MISSING", "HIGH", "Cedente, venditore o originator non disponibile.", true);
+    if (!input.counterparties.buyerOrRecipientAvailable)
+      add(
+        "BUYER_MISSING",
+        "HIGH",
+        "Buyer, cessionario o controparte finale non disponibile.",
+        true,
+      );
 
-  if (!input.operations.ownerAssigned) add("OWNER_MISSING", "CRITICAL", "Owner operativo non assegnato.", true);
-  if (!input.operations.nextActionDefined) add("NEXT_ACTION_MISSING", "HIGH", "Next action non definita.", true);
-  if (!input.operations.deadlineDefined) add("DEADLINE_MISSING", "HIGH", "Deadline non definita.", true);
+    if (!input.fee.defined) add("FEE_UNDEFINED", "CRITICAL", "Fee Walltech non definita.", true);
+    if (!input.fee.payerIdentified)
+      add("FEE_PAYER_UNKNOWN", "HIGH", "Soggetto pagatore non identificato.", true);
+    if (!input.fee.maturityDefined)
+      add("FEE_MATURITY_UNKNOWN", "HIGH", "Momento di maturazione della fee non definito.", true);
+    if (!input.fee.protectedByAgreement)
+      add("FEE_UNPROTECTED", "CRITICAL", "Fee non protetta da accordo.", true);
+  } else if (
+    !input.fee.defined ||
+    !input.fee.payerIdentified ||
+    !input.fee.maturityDefined ||
+    !input.fee.protectedByAgreement
+  ) {
+    add(
+      "COMMERCIAL_MODEL_PENDING",
+      "LOW",
+      "Modello economico Walltech non ancora definito; non blocca la decisione tecnica sull'asset.",
+      false,
+    );
+  }
+
+  if (!input.operations.ownerAssigned)
+    add("OWNER_MISSING", "CRITICAL", "Owner operativo non assegnato.", true);
+  if (!input.operations.nextActionDefined)
+    add("NEXT_ACTION_MISSING", "HIGH", "Next action non definita.", true);
+  if (!input.operations.deadlineDefined)
+    add("DEADLINE_MISSING", "HIGH", "Deadline non definita.", true);
 
   if (input.evidence.missing.length > 0)
-    add("EVIDENCE_MISSING", "HIGH", `Evidence mancanti: ${input.evidence.missing.join(", ")}.`, true);
+    add(
+      "EVIDENCE_MISSING",
+      "HIGH",
+      `Evidence mancanti: ${input.evidence.missing.join(", ")}.`,
+      true,
+    );
 
-  if (!input.compliance.walltechRoleDefined) add("ROLE_UNDEFINED", "CRITICAL", "Ruolo Walltech non definito.", true);
+  if (!input.compliance.walltechRoleDefined)
+    add("ROLE_UNDEFINED", "CRITICAL", "Ruolo Walltech non definito.", true);
   if (input.compliance.reservedActivityDetected)
-    add("RESERVED_ACTIVITY", "CRITICAL", "Rilevata attività riservata: necessario routing a professionista abilitato.", true);
+    add(
+      "RESERVED_ACTIVITY",
+      "CRITICAL",
+      "Rilevata attività riservata: necessario routing a professionista abilitato.",
+      true,
+    );
   if (input.compliance.regulatedProfessionalsRequired && !input.compliance.disclaimerApplied)
     add("DISCLAIMER_MISSING", "HIGH", "Disclaimer professionale non applicato.", true);
 
