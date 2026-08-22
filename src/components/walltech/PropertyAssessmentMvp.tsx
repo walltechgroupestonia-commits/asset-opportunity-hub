@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import {
   ArrowLeft,
   ArrowRight,
@@ -29,6 +30,7 @@ import { buildPropertyStrategyContext } from "@/lib/walltech/propertyStrategyBri
 import { PropertyDocumentIntake } from "@/components/walltech/PropertyDocumentIntake";
 import type { PropertyDocumentEvidenceLayer } from "@/lib/walltech/propertyIntelligenceTypes";
 import type { PvpPublicAcquisitionMetadata } from "@/lib/adapters/pvpEvidenceAcquisition.server";
+import { createEnginePropertyCase } from "@/lib/walltech/engineCase.functions";
 
 const DOCUMENTS = [
   "Avviso di vendita",
@@ -58,6 +60,8 @@ const INITIAL_DRAFT: PropertyAssessmentDraft = {
 
 export function PropertyAssessmentMvp() {
   const navigate = useNavigate();
+  const createEnginePropertyCaseFn =
+    useServerFn(createEnginePropertyCase);
   const [draft, setDraft] =
     useState<PropertyAssessmentDraft>(INITIAL_DRAFT);
   const [documentEvidence, setDocumentEvidence] =
@@ -110,7 +114,9 @@ export function PropertyAssessmentMvp() {
     }));
   };
 
-  const submit = (event: React.FormEvent<HTMLFormElement>) => {
+  const submit = async (
+    event: React.FormEvent<HTMLFormElement>,
+  ) => {
     event.preventDefault();
 
     const opportunity = createPropertyOpportunity(draft);
@@ -192,7 +198,16 @@ export function PropertyAssessmentMvp() {
           enrichedOpportunity.creditorIntelligence,
       });
 
-    savePropertyOpportunity(enrichedOpportunity);
+    const persisted =
+      await createEnginePropertyCaseFn({
+        data: {
+          opportunity: enrichedOpportunity,
+        },
+      });
+
+    savePropertyOpportunity(
+      persisted.opportunity,
+    );
 
     void navigate({ to: "/decision" });
   };
