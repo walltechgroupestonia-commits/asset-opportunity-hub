@@ -29,6 +29,9 @@ interface PropertyDocumentIntakeProps {
     detectedDocuments: string[],
     pvpMetadata?: PvpPublicAcquisitionMetadata,
   ) => void;
+  onPvpDiscovery?: (
+    metadata: PvpPublicAcquisitionMetadata,
+  ) => void;
 }
 
 const MAX_FILE_SIZE = 50 * 1024 * 1024;
@@ -59,6 +62,7 @@ const statusLabel = (
 
 export function PropertyDocumentIntake({
   onChange,
+  onPvpDiscovery,
 }: PropertyDocumentIntakeProps) {
   const [processing, setProcessing] = useState(false);
   const [result, setResult] =
@@ -173,9 +177,11 @@ export function PropertyDocumentIntake({
           data: { announcementId },
         });
 
-      setPvpMetadata(
-        discovery as PvpPublicAcquisitionMetadata,
-      );
+      const metadata =
+        discovery as PvpPublicAcquisitionMetadata;
+
+      setPvpMetadata(metadata);
+      onPvpDiscovery?.(metadata);
 
       setPvpAttachments(
         discovery.attachments.map((item) => ({

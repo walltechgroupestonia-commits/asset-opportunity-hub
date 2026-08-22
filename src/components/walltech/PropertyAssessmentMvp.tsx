@@ -41,6 +41,114 @@ const DOCUMENTS = [
   "Visure ipotecarie aggiornate",
 ];
 
+const normalizePvpDate = (
+  value?: string,
+): string => {
+  if (!value) return "";
+
+  const raw = value.trim();
+
+  const iso = raw.match(
+    /^(\d{4})-(\d{2})-(\d{2})/,
+  );
+
+  if (iso) {
+    return `${iso[1]}-${iso[2]}-${iso[3]}`;
+  }
+
+  const european = raw.match(
+    /^(\d{2})[\/.-](\d{2})[\/.-](\d{4})/,
+  );
+
+  if (european) {
+    return `${european[3]}-${european[2]}-${european[1]}`;
+  }
+
+  return "";
+};
+
+const normalizePvpTime = (
+  value?: string,
+): string => {
+  if (!value) return "00:00";
+
+  const match = value.trim().match(
+    /(\d{1,2}):(\d{2})/,
+  );
+
+  if (!match) return "00:00";
+
+  return `${match[1].padStart(2, "0")}:${match[2]}`;
+};
+
+const normalizePvpDateTime = (
+  date?: string,
+  time?: string,
+): string => {
+  const normalizedDate = normalizePvpDate(date);
+
+  if (!normalizedDate) return "";
+
+  return `${normalizedDate}T${normalizePvpTime(time)}`;
+};
+
+const inferPvpPropertyType = (
+  metadata: PvpPublicAcquisitionMetadata,
+): string => {
+  const source = [
+    metadata.lot.categoryLabel,
+    metadata.lot.lotTypeLabel,
+    ...metadata.goods.flatMap((item) => [
+      item.assetTypeLabel,
+      item.categoryLabel,
+    ]),
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+
+  if (
+    source.includes("appart") ||
+    source.includes("abitaz") ||
+    source.includes("residen")
+  ) {
+    return "Appartamento";
+  }
+
+  if (
+    source.includes("villa") ||
+    source.includes("casa indipendente")
+  ) {
+    return "Villa";
+  }
+
+  if (source.includes("ufficio")) {
+    return "Ufficio";
+  }
+
+  if (source.includes("terreno")) {
+    return "Terreno";
+  }
+
+  if (
+    source.includes("capann") ||
+    source.includes("industrial") ||
+    source.includes("logistic") ||
+    source.includes("magazz")
+  ) {
+    return "Industriale";
+  }
+
+  if (
+    source.includes("negozio") ||
+    source.includes("commercial")
+  ) {
+    return "Commerciale";
+  }
+
+  return "";
+};
+
 const INITIAL_DRAFT: PropertyAssessmentDraft = {
   title: "",
   address: "",
@@ -92,6 +200,101 @@ export function PropertyAssessmentMvp() {
     }));
   };
 
+  const applyPvpMetadataToDraft = (
+    metadata: PvpPublicAcquisitionMetadata,
+  ) => {
+    setPvpMetadata(metadata);
+
+    const primaryAddress =
+      metadata.goods.find(
+        (item) =>
+          item.address?.raw ||
+          item.address?.city ||
+          item.address?.provinceCode,
+      )?.address;
+
+    const procedureNumber =
+      metadata.procedure.number
+        ? [
+            metadata.procedure.number,
+            metadata.procedure.year,
+          ]
+            .filter(
+              (value) =>
+                value !== undefined &&
+                value !== null &&
+                String(value).trim() !== "",
+            )
+            .join("/")
+        : "";
+
+    const propertyType =
+      inferPvpPropertyType(metadata);
+
+    setDraft((current) => ({
+      ...current,
+
+      title:
+        current.title ||
+        [
+          `PVP ${metadata.announcementId}`,
+          primaryAddress?.city,
+        ]
+          .filter(Boolean)
+          .join(" · "),
+
+      address:
+        primaryAddress?.raw ||
+        current.address,
+
+      city:
+        primaryAddress?.city ||
+        current.city,
+
+      province:
+        (
+          primaryAddress?.provinceCode ||
+          current.province
+        ).toUpperCase(),
+
+      propertyType:
+        propertyType ||
+        current.propertyType,
+
+      tribunal:
+        metadata.procedure.courtLabel ||
+        current.tribunal,
+
+      procedureNumber:
+        procedureNumber ||
+        current.procedureNumber,
+
+      auctionDate:
+        normalizePvpDateTime(
+          metadata.sale.saleDate,
+          metadata.sale.saleTime,
+        ) ||
+        current.auctionDate,
+
+      offerDeadline:
+        normalizePvpDateTime(
+          metadata.sale.offerDeadlineDate,
+          metadata.sale.offerDeadlineTime,
+        ) ||
+        current.offerDeadline,
+
+      basePrice:
+        metadata.sale.basePrice != null
+          ? String(metadata.sale.basePrice)
+          : current.basePrice,
+
+      minimumOffer:
+        metadata.sale.minimumOffer != null
+          ? String(metadata.sale.minimumOffer)
+          : current.minimumOffer,
+    }));
+  };
+
   const updateDocumentEvidence = (
     evidence: PropertyDocumentEvidenceLayer,
     detectedDocuments: string[],
@@ -100,7 +303,7 @@ export function PropertyAssessmentMvp() {
     setDocumentEvidence(evidence);
 
     if (metadata) {
-      setPvpMetadata(metadata);
+      applyPvpMetadataToDraft(metadata);
     }
 
     setDraft((current) => ({
@@ -573,6 +776,9 @@ export function PropertyAssessmentMvp() {
 
                 <PropertyDocumentIntake
                   onChange={updateDocumentEvidence}
+                  onPvpDiscovery={
+                    applyPvpMetadataToDraft
+                  }
                 />
               </section>
             </div>
