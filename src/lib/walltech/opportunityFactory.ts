@@ -20,6 +20,23 @@ export interface PropertyAssessmentDraft {
   availableDocuments: string[];
 }
 
+export type PropertyAssessmentProvenanceField =
+  | "address"
+  | "city"
+  | "province"
+  | "propertyType"
+  | "tribunal"
+  | "procedureNumber"
+  | "auctionDate"
+  | "offerDeadline"
+  | "basePrice"
+  | "minimumOffer";
+
+export interface PropertyAssessmentProvenanceContext {
+  pvpAnnouncementId?: string;
+  officialPvpFields?: PropertyAssessmentProvenanceField[];
+}
+
 const textValue = (
   value: string,
   label: string,
@@ -69,6 +86,7 @@ const numberOrNull = (value: string): number | null => {
 
 export function createPropertyOpportunity(
   draft: PropertyAssessmentDraft,
+  provenance: PropertyAssessmentProvenanceContext = {},
 ): PropertyOpportunityInput {
   const opportunityId = `WT-PROP-${Date.now()}`;
 
@@ -89,7 +107,7 @@ export function createPropertyOpportunity(
     (document) => !availableDocuments.includes(document),
   );
 
-  return {
+  const opportunity: PropertyOpportunityInput = {
     opportunityId,
     title:
       draft.title.trim() ||
@@ -201,4 +219,65 @@ export function createPropertyOpportunity(
     globalWarnings: [],
   },
   };
+
+  const officialFields = new Set(
+    provenance.officialPvpFields ?? [],
+  );
+
+  const officialSourceLabel =
+    provenance.pvpAnnouncementId
+      ? `PVP ${provenance.pvpAnnouncementId} · fonte ufficiale`
+      : "PVP · fonte ufficiale";
+
+  const markOfficial = (
+    value: ProvenanceValue<unknown>,
+  ) => {
+    if (value.value === null) return;
+
+    value.sourceClass = "OFFICIAL";
+    value.sourceLabel = officialSourceLabel;
+    value.confidence = "CONFIRMED";
+  };
+
+  if (officialFields.has("tribunal")) {
+    markOfficial(opportunity.procedure.tribunal);
+  }
+
+  if (officialFields.has("procedureNumber")) {
+    markOfficial(opportunity.procedure.procedureNumber);
+  }
+
+  if (officialFields.has("auctionDate")) {
+    markOfficial(opportunity.procedure.auctionDate);
+  }
+
+  if (officialFields.has("offerDeadline")) {
+    markOfficial(opportunity.procedure.offerDeadline);
+  }
+
+  if (officialFields.has("basePrice")) {
+    markOfficial(opportunity.procedure.basePrice);
+  }
+
+  if (officialFields.has("minimumOffer")) {
+    markOfficial(opportunity.procedure.minimumOffer);
+  }
+
+  if (officialFields.has("address")) {
+    markOfficial(opportunity.asset.address);
+  }
+
+  if (officialFields.has("city")) {
+    markOfficial(opportunity.asset.city);
+  }
+
+  if (officialFields.has("province")) {
+    markOfficial(opportunity.asset.province);
+  }
+
+  if (officialFields.has("propertyType")) {
+    markOfficial(opportunity.asset.propertyType);
+  }
+
+  return opportunity;
 }

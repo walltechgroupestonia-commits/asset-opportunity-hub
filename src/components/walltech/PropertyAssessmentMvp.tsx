@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import {
@@ -21,6 +21,7 @@ import {
 import {
   createPropertyOpportunity,
   type PropertyAssessmentDraft,
+  type PropertyAssessmentProvenanceField,
 } from "@/lib/walltech/opportunityFactory";
 import { savePropertyOpportunity } from "@/lib/walltech/opportunityStore";
 import { applyDocumentEvidenceToOpportunity } from "@/lib/walltech/documentEvidenceBridge";
@@ -149,6 +150,26 @@ const inferPvpPropertyType = (
   return "";
 };
 
+const PVP_PROVENANCE_FIELDS: readonly PropertyAssessmentProvenanceField[] = [
+  "address",
+  "city",
+  "province",
+  "propertyType",
+  "tribunal",
+  "procedureNumber",
+  "auctionDate",
+  "offerDeadline",
+  "basePrice",
+  "minimumOffer",
+];
+
+const isPvpProvenanceField = (
+  key: keyof PropertyAssessmentDraft,
+): key is PropertyAssessmentProvenanceField =>
+  PVP_PROVENANCE_FIELDS.includes(
+    key as PropertyAssessmentProvenanceField,
+  );
+
 const INITIAL_DRAFT: PropertyAssessmentDraft = {
   title: "",
   address: "",
@@ -178,6 +199,11 @@ export function PropertyAssessmentMvp() {
   const [pvpMetadata, setPvpMetadata] =
     useState<PvpPublicAcquisitionMetadata | null>(null);
 
+  const pvpOfficialFieldsRef =
+    useRef<Set<PropertyAssessmentProvenanceField>>(
+      new Set(),
+    );
+
   const update = (
     key: keyof PropertyAssessmentDraft,
     value: string,
@@ -186,6 +212,10 @@ export function PropertyAssessmentMvp() {
       ...current,
       [key]: value,
     }));
+
+    if (isPvpProvenanceField(key)) {
+      pvpOfficialFieldsRef.current.delete(key);
+    }
   };
 
   const toggleDocument = (document: string) => {
@@ -230,6 +260,61 @@ export function PropertyAssessmentMvp() {
 
     const propertyType =
       inferPvpPropertyType(metadata);
+
+    const officialFields =
+      new Set<PropertyAssessmentProvenanceField>();
+
+    if (primaryAddress?.raw) {
+      officialFields.add("address");
+    }
+
+    if (primaryAddress?.city) {
+      officialFields.add("city");
+    }
+
+    if (primaryAddress?.provinceCode) {
+      officialFields.add("province");
+    }
+
+    if (propertyType) {
+      officialFields.add("propertyType");
+    }
+
+    if (metadata.procedure.courtLabel) {
+      officialFields.add("tribunal");
+    }
+
+    if (procedureNumber) {
+      officialFields.add("procedureNumber");
+    }
+
+    if (
+      normalizePvpDateTime(
+        metadata.sale.saleDate,
+        metadata.sale.saleTime,
+      )
+    ) {
+      officialFields.add("auctionDate");
+    }
+
+    if (
+      normalizePvpDateTime(
+        metadata.sale.offerDeadlineDate,
+        metadata.sale.offerDeadlineTime,
+      )
+    ) {
+      officialFields.add("offerDeadline");
+    }
+
+    if (metadata.sale.basePrice != null) {
+      officialFields.add("basePrice");
+    }
+
+    if (metadata.sale.minimumOffer != null) {
+      officialFields.add("minimumOffer");
+    }
+
+    pvpOfficialFieldsRef.current = officialFields;
 
     setDraft((current) => ({
       ...current,
@@ -322,7 +407,17 @@ export function PropertyAssessmentMvp() {
   ) => {
     event.preventDefault();
 
-    const opportunity = createPropertyOpportunity(draft);
+    const opportunity = createPropertyOpportunity(
+      draft,
+      {
+        pvpAnnouncementId:
+          pvpMetadata?.announcementId,
+        officialPvpFields:
+          Array.from(
+            pvpOfficialFieldsRef.current,
+          ),
+      },
+    );
 
     if (documentEvidence) {
       opportunity.documentEvidence = documentEvidence;
